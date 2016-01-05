@@ -1,4 +1,5 @@
 #coding:utf-8
+############ 第一种
 f = open('www_access_20140823.log', 'r')
 # f = open('1.log', 'r')
 _dir = {}
@@ -27,3 +28,40 @@ for j in range(len(a_list)-1):
 		if a_list[i][2][1] < a_list[i+1][2][1]:
 			a_list[i],a_list[i+1] = a_list[i+1],a_list[i]
 print a_list[:10]
+
+############# 第二种
+stat_dict = {}
+f = open('www_access_20140823.log', 'r')
+#1、找到次数，字典中key为ip,url,code的组合，value为次数
+for line in f:
+	line_list = line.split()
+	ip = line_list[0]
+	url = line_list[6]
+	code = line_list[8]
+	key = (ip,url,code)
+	if key not in stat_dict:
+		stat_dict[key] = 1
+	else:
+		stat_dict[key] += 1
+f.close()
+#2、反转key和value，新的字段key为次数，value为输出结果：[code,url,(ip,value)]
+stat_count_dict = {}
+for key,value in stat_dict.items():
+	new_key = value
+	ip,url,code = key
+	new_value = [code,url,(ip,value)]
+	if new_key not in stat_count_dict:
+		stat_count_dict[new_key] = []
+	stat_count_dict[new_key].append(new_value)
+#3、将次数（key）冒泡排序。
+count_list = stat_count_dict.keys()
+for j in range(len(count_list) - 1):
+	for i in range(len(count_list) - 1):
+		if count_list[i] < count_list[i+1]:
+			count_list[i],count_list[i+1] = count_list[i+1],count_list[i]
+#4、将结果输入到文件
+handle = open('rs.txt','w')
+for count in count_list:
+	for item in stat_count_dict[count]:
+		handle.write(str(item) + '\n')
+handle.close
