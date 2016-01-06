@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+
+l_dict = {}
+l_list = []
+
+
+f = open('11.txt','r')
+
+for line_i in f:
+    line_i = line_i.split(' ')
+    ip = line_i[0] 
+    url = line_i[6]
+    status = line_i[8]
+    ius = ip,url,status
+    l_dict.setdefault(ius,0)
+    l_dict[ius] += 1
+    #print l_dict
+
+f.close()
+
+
+for k,v in l_dict.items():
+    ip,url,status = k
+    l_list.append([(ip,v),url,status])
+    #print l_list
+
+
+for j in range(len(l_list) - 1):
+    for i in range(len(l_list) - 1):
+        if l_list[i][2][1] < l_list[i+1][2][1]:
+            l_list[i],l_list[i+1] = l_list[i+1],l_list[i]
+
+print l_list[::11]
