@@ -20,3 +20,14 @@ for j in range(len(_dict) -1 ):
 print "更改过的list"
 print _dict[:10]
 
+
+'''
+不错
+使用dict对字符串中的字符计数
+使用setdefault初始化字符个数
+使用冒泡排序对每个元素的都是tuple的list进行从大到小排序，并对元素tuple中的多项比较，
+使用切片获取排序后列表的前十位
+
+继续加油
+
+'''
