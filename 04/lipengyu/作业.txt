@@ -31,3 +31,9 @@ for j in range(len(l_list) - 1):
             l_list[i],l_list[i+1] = l_list[i+1],l_list[i]
 
 print l_list[::11]
+
+
+'''
+30行不正确，l_list中的每个元素是[(ip, code), url, status], 注意l_list[i][2][1]是什么？
+
+'''

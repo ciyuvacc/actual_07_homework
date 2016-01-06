@@ -65,3 +65,13 @@ for count in count_list:
 	for item in stat_count_dict[count]:
 		handle.write(str(item) + '\n')
 handle.close
+
+
+
+'''
+不错，使用多种方法练习，最后将结果写入文件，结果正确，很努力，给你点个赞，继续加油
+
+需要注意：
+1. 函数的调用一定要用函数名+()，如果不加括号，函数是不调用的，本周咱们回学习函数
+
+'''
