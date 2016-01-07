@@ -11,12 +11,12 @@ read_me = '''
 '''
 
 str_dict={}
-for i in read_me: #���б����ݷŽ��ֵ�
+for i in read_me: #°ÑÁÐ±íÄÚÈÝ·Å½ø×Öµä
     str_dict.setdefault(i,0)
     str_dict[i] += 1
 
 
-lstr =  str_dict.items() #�ֵ�����ת�����б�
+lstr =  str_dict.items() #×ÖµäÄÚÈÝ×ª»»³ÉÁÐ±í
 
 for i1 in range(len(lstr)-1):
     for i2 in range(i1,0,-1):
@@ -24,3 +24,13 @@ for i1 in range(len(lstr)-1):
             lstr[i2],lstr[i2+1] = lstr[i2+1],lstr[i2]
         
 print lstr[:10]
+
+
+'''
+思路正确，但是排序算法有问题，想想怎么的冒泡排序，插入排序，或者可以使用list提供的排序函数
+
+需要主机文件编码格式
+
+继续加油
+
+'''

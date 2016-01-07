@@ -32,3 +32,11 @@ if __name__ == '__main__':
     logfile = '/tmp/www_access_20140823.lo'
     analyselog = AnalyseLog(logfile)
     print(analyselog.main()[:11])
+
+
+'''
+不错，预习了函数，类，with等知识，结果正确
+
+继续加油
+
+'''

@@ -16,3 +16,14 @@ ordLst = sorted(res.iteritems(),key = lambda x:x[1], reverse=True)
 
 for i in ordLst[0:10]:
 	print '"{0}" 出现{1}次'.format(i[0], i[1])
+
+
+
+'''
+不错
+使用dict对字符串中的字符计数
+使用setdefault初始化字符个数
+使用sorted函数对列表进行排序，并使用lambda函数
+
+继续加油
+'''

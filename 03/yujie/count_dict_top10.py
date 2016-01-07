@@ -119,3 +119,7 @@ for num in num_list:
 			break	
 	if print_cnt >= print_cnt_total:
 		break
+
+'''
+不错，尝试了不多的方法，而且明确知道每种方法的优缺点，尝试使用学到的知识点，继续努力
+'''

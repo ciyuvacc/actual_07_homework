@@ -29,3 +29,7 @@ num = [chr(i) for i in range(ord("a"), ord("j")+1)]
 for i in num:print i, ':', str1.count(i)
 
     
+'''
+看做法是统计了a-j字符的出现次数，跟怎么的作业不相关，希望能按照咱们作业要求重新完成
+
+'''
