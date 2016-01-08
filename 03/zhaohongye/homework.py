@@ -53,3 +53,10 @@ for num in num_list:
 			break
 	if print_cnt >+ print_total:
 			break
+
+
+'''
+不错，思路很清晰，尝试使用不同的方法，结果正确，继续努力
+
+
+'''
