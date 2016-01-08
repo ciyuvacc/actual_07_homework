@@ -19,7 +19,7 @@ def split_log(logfile):
 
 def main():
     if not len(sys.argv) > 1:
-        print __doc__
+        print "input your log file"
         sys.exit(1)
 
     in_file_path = sys.argv[1]
@@ -27,7 +27,6 @@ def main():
         infile = open(in_file_path, 'r')
     except IOError:
         print "File does not exsit"
-        print __doc__
         sys.exit(1)
     
     _relist_dict = {}
