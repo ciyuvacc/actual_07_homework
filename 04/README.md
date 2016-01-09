@@ -6,7 +6,7 @@
 
 简单的nginx日志分析
 
-日志文件在/home/share/www_access_20140823.log，已放置在代码仓库中
+日志文件在/home/share/www_access_20140823.log
 
 期望输出一个list，分别存储http状态，访问url，ip，访问次数，如下示例：
 
