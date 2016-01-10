@@ -13,3 +13,19 @@ for j in range(len(list_1)):
             list_1[key],list_1[key+1]= list_1[key+1],list_1[key]
 for _key,_value in list_1[:10]:
     print '%s共出现%s次' % (_key,_value)
+
+
+
+'''
+不错
+使用dict对字符串中的字符计数
+使用setdefault初始化字符个数
+使用冒泡排序对每个元素的都是tuple的list进行从大到小排序
+使用切片获取排序后列表的前十位
+
+继续加油，可以在完成的基础功能之上给自己添加点障碍
+比如如果前20个字符的数量都相同呢？我们可以指定一个规则比如按字母a到z的顺序找到前10个
+比如如果read_me中有大小写的字符呢？我们不区分大小写时如何统计
+
+
+'''
