@@ -12,7 +12,7 @@
 
 要求：用sorted和lambda完成
 
-- 级别1：用lambda中用max
+- 级别1：在lambda中用max
 
 - 级别2：lambda中不用max
 
