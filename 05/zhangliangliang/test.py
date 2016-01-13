@@ -1,9 +1,0 @@
-ubuntu
-111
-adfadfasd
-a
-sdf
-asd
-f
-asd
-f
