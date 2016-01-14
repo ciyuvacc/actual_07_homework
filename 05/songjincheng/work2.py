@@ -35,7 +35,7 @@ def datalist(key):
         print i
 
 if __name__ == '__main__':
-    datalist(logfile('www_access_20140823.log'))
+    datalist(logfile('/srv/salt/www_access_20140823.log'))
 
  
      
