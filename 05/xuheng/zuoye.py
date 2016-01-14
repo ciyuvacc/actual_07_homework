@@ -20,8 +20,8 @@ def alyze_log(logfile):
         for key, value in log_dict.iteritems():
             log_list.append([key[0], key[1], (key[2], value)])
 
-        print   sorted(log_list, key=lambda x: x[2][1], reverse=True)[:10]
+        return   sorted(log_list, key=lambda x: x[2][1], reverse=True)[:10]
 
 
-alyze_log("D:\www_access_20140823.log")
+print alyze_log("D:\www_access_20140823.log")
 
