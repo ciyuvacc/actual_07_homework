@@ -1,39 +1,34 @@
-stat_dict = {}
+handle = open('www_access_20140023.log')
 
-handle = open('www_access_20140823.log','r')
+while True:
+    _line = handle.readline() #读取一行
+    #判断文件是否已经读完
+    if '' = _line:
+        break
+    #解析每一行
+    _logs = _line.split()
+    _ip = _logs[0]
+    _url = _logs[6]
+    _code = _logs[8]
 
-for line in handle:
-    line_list = line.split(' ')
-    ip = line_list[0]
-    url = line_list[6]
-    code = line_list[8]
+    _key = (_ip, _url, _code)
+    log_dict.setdefault(_key,0)
+    log_dict[_key] +=1
 
-    key = (ip, url, code) 
-    if key not in stat_dict:
-        stat_dict[key] = 1
-    else:
-        stat_dict[key] +=1
+handle.close()
 
-handle.close() 
+#dict=>list
 
-'''
-dict change to list
-'''
+log_list = []
+for _key in log_dict:
+    _value = log_dict[_key]
+    _ip,_url,_code = _key
+    log_list.append([_code,_url,(_ip,_value)])
 
-stat_list = []
+for j in range(10):
+    for i in range(len(log_list) - 1):
+        if log_list[i][2]][1] > log_list[i + 1][2][1]:
+            log_list[i],log_list[i+1] = log_list[i+1],log_list[i]
 
-for key,value in stat_dict.items():
-    ip,url,code = key
-    stat_list.append([code, url,(ip,value)])
-
-'''
-sort
-'''
-print len(stat_list)
-for j in range(len(stat_list) - 1):
-    for i in range(len(stat_list) - 1):
-        if stat_list[i][2][1] <stat_list[i + 1][2][1]:
-            stat_list[i],stat_list[i+1] = stat_list[i+1],stat_list[i]
-print stat_list[:10]
-
-
+for n in log_list[:-11:-1]:
+    print n
