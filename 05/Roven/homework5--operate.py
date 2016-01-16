@@ -30,3 +30,9 @@ def operate(mystr):
 
 mystr='-10+2+2*3/4+2*3-5'
 print operate(mystr)
+
+
+
+'''
+ok,  应该没什么问题，先将字符串拆解，然后从前到后依次计算，是与优先级无关的方法
+'''

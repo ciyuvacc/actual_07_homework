@@ -155,3 +155,8 @@ write_file(arr_list)
 
 print time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 
+
+'''
+ok,  没有问题，使用了多种方法，能够自己拆解并定义函数，不错，还预习了后面的知识，继续加油
+
+'''

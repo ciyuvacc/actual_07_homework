@@ -25,3 +25,15 @@ def alyze_log(logfile):
 
 print alyze_log("D:\www_access_20140823.log")
 
+
+
+'''
+排序功能没有问题
+
+可以试试cmp参数
+sorted(num_list, cmp=lambda x, y: 1 if max(x) > max(y) else (0 if max(x) > max(y) else -1))
+
+对于log分析的
+如果我有时候想要获取TOP 10， 有时候想要获取Top 20，应该怎么做呢？能不能把它拽变成参数，而且有默认值为10
+
+'''

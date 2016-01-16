@@ -6,3 +6,10 @@ print sorted(l, key=lambda t: max(t))
 
 # 列表中的每个元素分别赋值给变量t，判断t[0]>t[1]，如果为真，key的值为t[0]；如果为假，key的值为t[1]，最后以key做排序生成一个新列表
 print sorted(l, key=lambda t: t[0] if t[0]>t[1] else t[1])
+
+'''
+ok没有问题
+
+可以试试cmp参数
+sorted(num_list, cmp=lambda x, y: 1 if max(x) > max(y) else (0 if max(x) > max(y) else -1))
+'''

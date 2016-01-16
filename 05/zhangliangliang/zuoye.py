@@ -44,3 +44,11 @@ try:
 except:
     print "\nUsage: %s <Number> <File name>" % sys.argv[0]
 
+
+'''
+ok 非常棒. 文件和topn通过调用参数传递
+但是需要注意
+line13 应该为sys.exit
+line15 慎用global，若需要使用尽量定义在函数外
+
+'''

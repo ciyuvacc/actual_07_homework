@@ -39,3 +39,8 @@ def list_sort(dict_list):
 if __name__ == '__main__':
 	dict_list = nginx_log('www_access_20140823.log')
 	list_sort(dict_list)
+
+'''
+ok,  没有问题，将不同功能进行拆分
+如果我有时候想要获取TOP 10， 有时候想要获取Top 20，应该怎么做呢？
+'''

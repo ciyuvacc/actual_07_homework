@@ -29,3 +29,9 @@ def ng_count(path):
         print i
 
 ng_count('/Users/it1/Desktop/python/nginx_log.txt')
+
+
+'''
+ok,  没有问题
+注意缩进, 如果我有时候想要获取TOP 10， 有时候想要获取Top 20，应该怎么做呢？
+'''

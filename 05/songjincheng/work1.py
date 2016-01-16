@@ -14,3 +14,11 @@ list_data = [(1,4),(5,1),(2,3)]
 print sorted(list_data,key = lambda x: max(x))
 #级别2：lambda中不用max
 print sorted(list_data, key = lambda x:x if x[0] > x[1] else x[1])
+
+'''
+ok,  没有问题
+
+可以试试cmp参数
+sorted(num_list, cmp=lambda x, y: 1 if max(x) > max(y) else (0 if max(x) > max(y) else -1))
+
+'''

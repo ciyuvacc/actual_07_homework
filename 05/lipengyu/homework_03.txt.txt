@@ -32,25 +32,25 @@ def divide(x,y):
 
 
 
-print ("选择运算方式:")
+print ("閫夋嫨杩愮畻鏂瑰紡:")
 
-print ("1.加法")
+print ("1.鍔犳硶")
 
-print ("2.减法")
+print ("2.鍑忔硶")
 
-print ("3.乘法")
+print ("3.涔樻硶")
 
-print ("4.除法")
-
-
-
-choice = input("输入选项编号:(1/2/3/4)")
+print ("4.闄ゆ硶")
 
 
 
-num1 = int(input("第一个数:"))
+choice = input("杈撳叆閫夐」缂栧彿:(1/2/3/4)")
 
-num2 = int(input("第二个数:"))
+
+
+num1 = int(input("绗竴涓暟:"))
+
+num2 = int(input("绗簩涓暟:"))
 
 
 
@@ -72,5 +72,10 @@ elif choice == '4':
 
 else:
 
-    print ("输入无效")
+    print ("杈撳叆鏃犳晥")
 
+
+'''
+ok娌℃湁闂锛屼絾鏄彧鏄鐢ㄦ埛杈撳叆鐨勪袱涓�艰繘琛岃绠楋紝鍜屽挶浠兂瑕佺殑璁＄畻琛ㄨ揪寮忥紝杩樻湁涓�瀹氳窛绂伙紝寰呭懆鏃ヤ粙缁嶈〃杈惧紡鐨勮绠楁柟娉曞悗锛屽啀杩涜缁冧範
+
+'''

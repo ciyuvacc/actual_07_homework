@@ -12,3 +12,8 @@ print sorted(arr, key=lambda (x,y):(x*(x>y)+y*(x<=y)))
 print sorted(arr, cmp=lambda x,y:max(x) > max(y) and 1 or -1)
 print sorted(arr, cmp=lambda x,y: x[0]*(x[0]>x[1])+x[1]*(x[0]<=x[1]) > y[0]*(y[0]>y[1])+y[1]*(y[0]<=y[1]) and 1 or -1)
 print sorted(arr, cmp=lambda x,y: (x[0] / x[1] and x[0] or x[1]) > (y[0] / y[1] and y[0] or y[1]) and 1 or -1)
+
+'''
+ok,  没有问题，非常棒，尤其是line10，使用整除判断大小(但是只适用于整数)
+
+'''

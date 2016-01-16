@@ -48,3 +48,15 @@ for j in range(n):
 for t in log_list[:-(n+1):-1]:
     print t
 
+
+'''
+排序功能没有问题
+
+可以试试cmp参数
+sorted(num_list, cmp=lambda x, y: 1 if max(x) > max(y) else (0 if max(x) > max(y) else -1))
+
+对于log分析的
+1. 注意函数的定义使用:
+2. 代码缩进
+
+'''

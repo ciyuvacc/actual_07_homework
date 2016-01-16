@@ -34,3 +34,10 @@ Sum = tmp_list[0]
 for n in range(1,len(tmp_list)):
     Sum = Sum_str(Sum,tmp_list[n][1:],tmp_list[n][0])
 print '%s = %.2f' % (str1,Sum)
+
+'''
+ok 没有问题，使用无优先级别方法计算
+但是需要注意
+慎用global，若需要使用尽量定义在函数外
+
+'''

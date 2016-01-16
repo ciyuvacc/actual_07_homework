@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-.- coding: utf-8 -.-
 
-
+import sys
 
 class doHomework(object):
     """This module is used to day 5 homework"""
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     print doHomework.sorted_list_two(templist)
 
     #作业2：分析日志
-    analyselog = doHomework.(logfile)
+    analyselog = doHomework(logfile)
     print(analyselog.log_analyse()[:11]) 
     
     #作业3-1：四则运算,不支持优先级
@@ -90,3 +90,11 @@ if __name__ == '__main__':
 
     #作业3-2：四则运算,支持优先级
     print doHomework.operate_two(tempstr)
+
+
+'''
+不错，已经预习了后面类的相关知识
+对于排序可以考虑下cmp方式，毕竟使用key只能按照一个值进行排序，如果多个最大值相同时，这时候按第二个最大值进行排序用key是做不到的
+
+表达式使用eval函数没有问题，但是可以自己解析下表达式，主要为练习列表的pop和append（堆的功能）
+'''
