@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>flask练习-注册与登录</title>
+    </head>
+    <body>
+        <div>
+
+            <p id="info">
+            {% if info%}
+            <span style="color:red">{{info}}</span><br />
+            {% endif %}
+            </p><br /><br />
+
+            <input id="bt1" type="button" value="登录">&nbsp;&nbsp;
+            <input id="bt2" type="button" value="注册"><br /><br />
+
+            <form id="login" action="/validate/" method="post">
+                账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户：<input type="text" name="username" /><br />
+                密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：<input type="password" name="password" /><br /><br />
+                <input type="submit" value="提交">
+            </form>
+
+            <form id="register" action="/record/" method="post">
+                {% if error%}
+                <span style="color:red">{{error}}</span><br />
+                {% endif %}
+                账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户：<input type="text" name="username" /><br />
+                密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：<input type="password" name="password" /><br />
+                密码确认：<input type="password" name="password2" /><br />
+                手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：<input type="text" name="mobile" /><br />
+                邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：<input type="text" name="email" /><br />
+                年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄：<input type="text" name="age" /><br /><br />
+                <input type="submit" value="提交">
+            </form>
+
+        </div>
+
+        <script src="../static/jquery.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#info').show()
+                $('#login').hide();
+                $('#register').hide();
+
+                $('#bt1').bind('click', function() {
+                    $('#info').hide()
+                    $('#login').show();
+                    $('#register').hide();
+                });
+
+                $('#bt2').bind('click', function() {
+                    $('#info').hide()
+                    $('#login').hide();
+                    $('#register').show();
+                })
+            })
+        </script>
+    </body>
+</html>

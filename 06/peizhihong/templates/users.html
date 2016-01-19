@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>已注册用户</title>
+    </head>
+    <body>
+        <table border=1>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>username</th>
+                    <th>mobile</th>
+                    <th>email</<th>
+                    <th>age</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users%}
+                <tr>
+                    <td>{{user[0]}}</td>
+                    <td>{{user[1]}}</td>
+                    <td>{{user[3]}}</td>
+                    <td>{{user[4]}}</td>
+                    <td>{{user[5]}}</td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <input type="button" id="return_bt" value="回到首页" onClick="location.href='/login'">
+    </body>
+</html>
