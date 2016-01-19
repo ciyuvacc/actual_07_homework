@@ -31,7 +31,7 @@ def loginvalidate():
 		try:
 			conn =sqlite3.connect('Reboot.sqlite')
 			cursor = conn.cursor()
-			cmd1 = "SELECT password FROM user WHERE password == '%s'" % password
+			cmd1 = "SELECT * FROM user WHERE username == '%s' AND password == '%s'" % (name,password)
 			cursor.execute(cmd1)
 			if cursor.fetchall():
 				return redirect('/users/')
