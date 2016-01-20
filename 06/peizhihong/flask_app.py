@@ -5,6 +5,7 @@ from flask import request
 from flask import render_template
 from flask import redirect
 import sqlite3
+import mycalc
 
 app = Flask(__name__)
 
@@ -79,6 +80,21 @@ def display_user():
 		return render_template('users.html', users=user_list)
 	except Exception,e:
 		return render_template('login.html', info=str(e))
+
+@app.route('/calc/', methods=['get','post'])
+def calc():
+	if request.method == 'GET':
+		return render_template('calc.html')
+	else:
+		expr = request.form.get('expr')
+		if expr:
+			try:
+				res = mycalc.arithmeticEval(expr)
+				return render_template('calc.html', expr = expr, calc_res = res)
+			except Exception,e:
+				return render_template('calc.html', info = str(e))
+		else:
+			return render_template('calc.html')
 
 if __name__ == '__main__':
 	app.run(debug=True,port=9090)

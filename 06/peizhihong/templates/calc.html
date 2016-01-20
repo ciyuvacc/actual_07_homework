@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>计算器</title>
+    </head>
+    <body>
+        <div>
+            <form id="calc" action="/calc/" method="post">
+                表达式：<input type="text" name="expr" /><br /><br />
+                <input type="submit" value="计算" /><br /><br />
+                <label>表达式 {{expr}} 结果为：</label><br /><br />
+                <label>{{calc_res}}</label>
+                {% if info %}
+                {{info}}
+                {% endif %}
+            </from>
+
+        </div>
+    </body>
+</html>
