@@ -5,12 +5,14 @@
 		<title>Flask Learn</title>
 	</head>
 	<body>
-    <table>
+    <table border="1">
         <tr>
-		{% for i in user_list %}
-		<td>{{i}}</td>
+		<td>用户名</td><td>用户密码</td><td>联系电话</td></tr>
+		{% for k,v in user_list.items() %}
+		<td>{{k}}</td><td>{{v[0]}}</td><td>{{v[1]}}</td></tr>
 		{% endfor %}
         </tr>
+
     </table>
 
 
