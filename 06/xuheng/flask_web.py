@@ -4,37 +4,14 @@ from flask import Flask
 from flask import render_template
 from flask import Response
 from flask import request,redirect
+from opfile import write_file,read_file,check_key
 import sys
-import os
+
 
 default_encoding = 'utf-8'
 if sys.getdefaultencoding() != default_encoding:
     reload(sys)
     sys.setdefaultencoding(default_encoding)
-
-def write_file(username,password,iphone):
-    if not os.path.exists('D:\user.txt'):
-        return '数据存储异常'
-    with open("D:\user.txt", "a") as f:
-            f.writelines(str(username)+','+str(password)+','+str(iphone)+'\n')
-            f.flush()
-            return True
-
-def read_file():
-    if not os.path.exists('D:\user.txt'):
-        return '数据存储异常'
-    with open("D:\user.txt", "r") as f:
-        listStu = {}
-        for user,pwd,phone in [l.split(',') for l in f]:
-            listStu[user.strip()]=[pwd.strip(),phone.strip()]
-        return listStu
-
-def check_key(username):
-    listStu=read_file()
-    if username in listStu:
-        return True
-    else:
-        return False
 
 
 app = Flask(__name__)
