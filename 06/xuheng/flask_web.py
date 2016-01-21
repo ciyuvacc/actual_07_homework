@@ -50,9 +50,9 @@ def GetRegiste():
         password=request.form.get('password')
         telephone=request.form.get('telephone')
         if check_key(username):
-            return Response('帐号已注册')
+            return Response('帐号已存在!!请更换帐号，重试')
         if write_file(username,password,telephone):
-            return Response('帐号已完成')
+            return Response('注册成功!!!')
     else:
          return Response('非法提交')
 
