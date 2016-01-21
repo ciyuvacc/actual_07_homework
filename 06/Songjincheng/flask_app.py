@@ -56,14 +56,15 @@ def user():
         name = request.form.get('name')
         pwd = request.form.get('pwd')
         email = request.form.get('email')
-        IPhone = request.form.get('IPhone')
-        with open('name.txt','a') as handle:
-            handle.write('%s,%s,%s,%s' % (name, pwd, email, IPhone))
-    files = filename('name.txt')
-    return render_template('user.html', file=files)
+        IPhone = request.form.get('IPhone')  
+    with open('name.txt','a') as handle:
+        handle.write('%s %s %s %s\n' % (name, pwd, email, IPhone))
+        return "注册成功"
+        
+##    files = filename('name.txt')
+##    return render_template('user.html', file=files)
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-#在注册页面输入后，提交，写不到文件里，但POST还没有报错， 请老师指点
+#注册后,在文件里,密码显示为None导致新注册的无法登录
