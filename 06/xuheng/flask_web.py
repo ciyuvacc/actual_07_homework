@@ -23,9 +23,8 @@ def index():
 
 @app.route('/userinfo')
 def userinfo():
-    user_list=read_file()
-    print user_list
-    return render_template('index.html',user_list=user_list)
+    user_dict=read_file()
+    return render_template('index.html',user_dict=user_dict)
 
 
 @app.route('/login/', methods = ['POST'])
