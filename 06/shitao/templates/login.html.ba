@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width-device=width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<script src="https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/jquery/jquery-1.10.2.min_f2fb5194.js"></script>
+        <script type="text/javascript">
+	jQuery (document).ready(function(){
+		jQuery("#hide").click(function(){
+			jQuery("a").hide();
+		});
+		jQuery("#show").click(function(){
+			jQuery("a").show();
+		});
+	});
+	</script>
+	<link href="/static/css/bootstrap.css" rel="stylesheet">
+	<link href="/static/css/signin.css" rel="stylesheet">
+        <title> Flask </title>
+    </head>
+    <body>
+	<div class="container">
+	<form  class="form-signin" role="form" action="/auth_login" method="post">
+	<h2 class="form-signin-heading">Test</h2>
+	<input type="text" class="form-control" name="username" placeholder="Username"  value="{{username}}" /><br />
+	<input type="password" class="form-control" name="password" placeholder="Password"  value="{{password}}" /><br />
+	{% if error %}
+	<span style="color:red">{{error}}</span> </br>
+	{% endif %}
+	<input type="submit" class="btn btn-lg btn-primary btn-block" value="登 陆" />
+	<a href="/regedit/" class="btn btn-lg btn-primary btn-block">注 册</a>
+	</form>
+	</div>
+	<center><button id="hide" type="button" class="btn btn-primary btn-sm btn-custom">隐藏</button>
+	<button id="show" type="button" class="btn btn-primary btn-sm btn-custom">显示</button></center>
+    </body>
+</html>

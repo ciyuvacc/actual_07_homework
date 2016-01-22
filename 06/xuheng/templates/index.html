@@ -8,7 +8,7 @@
     <table border="1">
         <tr>
 		<td>用户名</td><td>用户密码</td><td>联系电话</td></tr>
-		{% for k,v in user_list.items() %}
+		{% for k,v in user_dict.items() %}
 		<td>{{k}}</td><td>{{v[0]}}</td><td>{{v[1]}}</td></tr>
 		{% endfor %}
         </tr>
