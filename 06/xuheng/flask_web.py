@@ -33,9 +33,9 @@ def GetLogin():
     if request.method == 'POST':
         username=request.form.get('username')
         password=request.form.get('password')
-        user_list=read_file()
-        if username in user_list.keys():
-            if password == user_list[username][0]:
+        user_dict=read_file()
+        if username in user_dict.keys():
+            if password == user_dict[username][0]:
                     return  redirect('/userinfo')
             else:
                     return  Response('密码错误')

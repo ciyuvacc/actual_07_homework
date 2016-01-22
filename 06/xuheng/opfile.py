@@ -16,14 +16,14 @@ def read_file():
     if not os.path.exists('user.txt'):
         return '数据存储异常'
     with open("user.txt", "r") as f:
-        listStu = {}
+        user_dict = {}
         for user,pwd,phone in [l.split(',') for l in f]:
-            listStu[user.strip()]=[pwd.strip(),phone.strip()]
-        return listStu
+            user_dict[user.strip()]=[pwd.strip(),phone.strip()]
+        return user_dict
 
 def check_key(username):
-    listStu=read_file()
-    if username in listStu:
+    user_dict=read_file()
+    if username in user_dict:
         return True
     else:
         return False
