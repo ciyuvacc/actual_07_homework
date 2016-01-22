@@ -34,12 +34,13 @@ def GetLogin():
         username=request.form.get('username')
         password=request.form.get('password')
         user_list=read_file()
-        for k,v in user_list.items():
-            print k,v
-            if username == k and password == v[0]:
-                return redirect('/userinfo')
+        if username in user_list.keys():
+            if password == user_list[username][0]:
+                    return  redirect('/userinfo')
             else:
-                return Response('帐号密码错误')
+                    return  Response('密码错误')
+        else:
+            return  Response('帐号不存在')
     else:
          return Response('非法提交')
 
