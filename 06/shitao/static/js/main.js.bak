@@ -1,0 +1,29 @@
+function selectAllDels(){
+    var allCheckBoxs=document.getElementsByName("preDelCheck");
+    var desc=document.getElementById("allChecked");
+    var selectOrUn=false;
+    for (var i = 0;i < allCheckBoxs.length;i++){
+        if(allCheckBoxs[i].checked){
+            selectOrUn=true;
+            break;
+        }
+    }
+    if (selectOrUn){
+        _allUnchecked(allCheckBoxs);
+    }else{
+        _allchecked(allCheckBoxs);
+    }
+}
+
+
+function _allchecked(allCheckBoxs){
+    for (var i = 0;i < allCheckBoxs.length;i++){
+        allCheckBoxs[i].checked = true;
+    }
+}
+
+function  _allUnchecked(allCheckBoxs){
+    for (var i = 0;i < allCheckBoxs.length;i++){
+        allCheckBoxs[i].checked = false;
+    }
+}

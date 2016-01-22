@@ -1,0 +1,49 @@
+.results-body{
+    margin:0px;
+    width: 100%;
+    min-width: 1100px;
+    overflow: auto;
+}
+
+.results-div{
+    margin: auto ! important;
+    width: 56.5%;
+}
+
+.results-h1{
+    background-color: #087;
+    margin: 0px;
+    text-align: center;
+    color: red;
+    height: 45px;
+}
+
+.results-time{
+    color: #000000;
+    /*margin-left: 20px;*/
+    text-align: center;
+}
+
+.results-h3{
+    color: blue;
+    /*margin-left: 20px;*/
+    text-align: center;
+}
+
+.op-h5{
+    color: #DC143C;
+    word-break: break-all;
+    text-align: center;
+}
+
+.results-pre{
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
+
+.finish-h3{
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}

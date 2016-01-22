@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>用户列表</title>
+    </head>
+    <body>
+        <table>
+           <thead>
+               <tr>
+                   <td>Username</td>
+                   <td>Password</td>
+                   <td>Email</td>
+               </tr>
+           </thead>
+           <tbody>
+           {% for user in users%}
+               <tr>
+                   <td>{{user[0]}}</td>
+                   <td>*********</td>
+                   <td>{{user[-1]}}</td>
+               </tr>
+           {% endfor %}
+           </tbody>
+        </table>
+	<hr />
+	<form action="/result/" method="post">
+	简易计算器：<input type="text" name="numbers" placeholder="请输入公式" value="{{numbers}}" />
+	<input type="submit" value="计算" /></br>
+	{% if result %}
+        <span style="color:blue">计算结果是：{{result}}</span> </br>
+        {% endif %}
+	</form>
+    </body>
+</html>
