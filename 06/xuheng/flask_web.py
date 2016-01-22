@@ -4,7 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import Response
 from flask import request,redirect
-from opfile import write_file,read_file,check_key
+from opfile import write_file,read_file,check_key,check_phone_num
 import sys
 
 
@@ -49,6 +49,9 @@ def GetRegiste():
         username=request.form.get('username')
         password=request.form.get('password')
         telephone=request.form.get('telephone')
+        phone_result=check_phone_num(telephone)
+        if phone_result != 'True':
+            return  Response(phone_result)
         if check_key(username):
             return Response('帐号已存在!!请更换帐号，重试')
         if write_file(username,password,telephone):
