@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+      <input class="btn_login" type="button" value="用户登录" /><br />
+       <input class="btn_registe" type="button" value="用户注册" /><br />
+
+    <form id="login" action="/" method="post">
+    用户名：<input type="text" name="username" /><br />
+    密码：  <input type="password" name="password" /><br />
+    <input type="submit" value="登录">
+
+   </form>
+
+   <form class="registe" action="/user/" method="post">
+   <input type="text" name="name" value="用户名" /><br />
+   <input type="text" name="password" value="密码" /><br />
+   <input type="text" name="email" value="邮箱" /><br />
+   <input type="text" name="IPhone" value="手机"/><br />
+   <input type="submit" value="注册">
+   </form>
+   <!-- <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script> -->
+   <script type="text/javascript" src="/static/jquery-1.8.3.min.js"></script>
+   <script type="text/javascript">
+       $(document).ready(function(){
+       // 隐藏registe注册部分 -->
+            $(".registe").hide();
+       // 隐藏btn_login用户登录 -->
+            $(".btn_login").hide();
+       // 绑定btn_registe用户注册 -->
+            $(".btn_registe").bind('click', function(){
+               // 显示注册信息registe -->
+                $(".registe").show();
+                // 显示用户登录btn_login -->
+                $(".btn_login").show();
+                // 隐藏login登录部分 -->
+                $("#login").hide();
+                // 隐藏btn_registe用户注册 -->
+                $(".btn_registe").hide();            
+            });
+            // 绑定btn_login 用户登录 -->
+            $(".btn_login").bind("click", function(){
+                // 显示btn_registe 用户注册部分 -->
+                $(".btn_registe").show();
+                // 显示用户登录部分login -->
+                $("#login").show();
+                // 隐藏用户注册部分 registe -->
+                $(".registe").hide();
+                // 隐藏用户登录部分 btn_login -->
+                $(".btn_login").hide();            
+            });       
+       });
+    </script>
+ </body>
+</html>

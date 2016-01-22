@@ -4,7 +4,7 @@
 
 log_stat_dict = {}
 # 读取文件
-handle = open('www_access_20140823.log')
+handle = open('D:\www_access_20140823.log')
 
 while True:
     _line = handle.readline()

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/jquery-ui.css">
+   <link rel="stylesheet" type="text/css" href="/static/css/sweetalert.css">
+<style>
+	#testdiv{
+		width: 950px
+	}
+       .mt20{
+          margin-top:20px;
+     }
+</style>
+ 
+</head>
+<body>
+   <div class="container">
+      <div class="row">
+
+		<div class="row">
+       <div class="col-md-1"></div>
+			<div data-aa='nihao'  id="msg-body" class="col-md-6 col-md-offset-2 alert alert-success">
+			</div>
+		</div>
+		<div class="row">
+       <div class="col-md-1"></div>
+			<div class="col-md-4 col-md-offset-3">
+				<input id='input-text' type="text" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+       <div class="col-md-1"></div>
+			<div class="col-md-1 col-md-offset-4 alert">
+				<button id='bt-commit' class="btn btn-primary">计算</button>
+			</div>
+			<div class=" col-md-offset-1 alert">
+				<button id='bt-reset' class="btn btn-primary">重置</button>
+			</div>
+		</div>
+
+     <div class="row">
+       <div class="col-md-2"></div>
+       <div class="col-md-10">
+        <table id='table-pass' class='table table-bordered table-striped mt20 table-hover table-condensed' >
+        </table>
+ 
+       </div>
+     </div>
+
+
+       <div class="col-md-2"></div>
+       <div class="col-md-10 mt20">
+          <form  class="form-inline">
+           <div class="form-group">
+ 
+             <label for="exampleInputName2">请输入查询行数</label>
+             <input type="text" class="form-control" id="countinput" placeholder="Count" name='count'>
+           </div>
+           <button id='select-btn' type="button" class="btn btn-success">查询</button>
+         </form>
+       </div>
+     </div>
+           <div class="row">
+       <div class="col-md-2"></div>
+       <div class="col-md-10">
+          <div id="testdiv" class='mt20'>
+	    <div id="slider"></div>
+	     top<span id="res">1</span>
+            </div>
+        <table id='table-content' class='table table-bordered table-striped  table-hover table-condensed' >
+        </table>
+ 
+       </div>
+     </div>
+     </div>
+
+<div class="modal fade" id='my-modal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">修改用户信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+           <label for="exampleInputName2">姓名</label>
+            <input type="text" class="form-control" id="updatename" placeholder="Username" name='username' disabled>
+
+            <label for="exampleInputName1">密码</label>
+            <input type="text" class="form-control" id="updatepass" placeholder="Password" name='passwd'>
+            <label for="exampleInputName1">邮箱</label>
+            <input type="email" class="form-control" id="updateemail" placeholder="Email" name='email'>
+            <label for="exampleInputName1">年龄</label>
+            <input type="text" class="form-control" id="updateage" placeholder="Age" name='age'>
+
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" id="btn-save" class="btn btn-primary" data-dismiss="modal">保存修改</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+ <script src='/static/js/jquery.js'></script>
+  <script src='/static/js/jquery-ui.js'></script>
+          <script src="/static/js/sweetalert.min.js"></script>
+        <script src='/static/js/bootstrap.js'></script>
+  <script>
+     function getpasslist(){
+      $.getJSON('/showpass',function(res){
+        var tmp_tab = '<tr><th>用户名</th><th>密码</th><th>邮箱</th><th>性别</th><th>年龄</th><th>操作</th></tr>'
+        $.each(res,function(index,value){
+            var sex =''
+           if(value['sex']=='1'){
+            sex ='男'
+           }else{
+            sex = '女'  
+           }
+           tmp_tab += '<tr><td>'+index+'</td><td>'+value['password']+'</td><td>'+value['email']+'</td><td>'+sex+'</td><td>'+value['age']+'</td><td><button type="button" data-name="'+index+'" data-pass="'+value['password']+'" data-email="'+value['email']+'" data-sex="'+value['sex']+'" data-age="'+value['age']+'" class="btn update-btn  btn-info">修改</button><button data-name="'+index+'" class ="btn delete-btn btn-danger">删除</td></tr>'
+        })
+           $('#table-pass').html(tmp_tab)
+      })
+}
+
+ getpasslist()
+
+
+       function getlist(count){
+         console.log('list'+count)
+         $.getJSON('/showlog?count='+count,function(res){
+            len_list=res.len
+             var tmp='<tr><th>id</th><th>code</th><th>uri</th><th>ip</th><th>count</th></tr>'
+             var id =1
+             $.each(res.data,function(index,value){
+             tmp += '<tr><th>'+id+'</th><td>' +value[0]+'</td><td>'+value[1]+'</td><td>' +value[2][0]+'</td><td>' +value[2][1]+'</td><</tr>'
+             id +=1
+           })
+             $('#table-content').html(tmp)
+         })
+
+       }
+
+    var len_list=1
+    var count = 10 
+    var tmpcount =10
+    $( "#slider" ).slider({
+        slide: function( event, ui ) {
+                count = ui.value
+                $('#res').html(ui.value)
+           
+        },
+        max:100,
+        min:1,
+        animate: "fast"
+    }).on('mouseout',function(){
+       if(tmpcount!=count){
+          console.log('tmpcount'+tmpcount)
+          getlist(count)
+        }
+        tmpcount = count
+    });
+
+     getlist(count)
+   $(document).on('click','#select-btn',function(){
+         count =$('#countinput').val()
+         getlist(count)
+         $('#countinput').val('')
+         
+    })
+
+
+		$('#bt-commit').on('click',function(){
+		   var msg =$('#input-text').val()
+	           var tmp = $('#msg-body').html() +'<br>' + msg 
+                   $.get('/operate?mycount='+encodeURIComponent(msg),function(res){
+                        console.log('aaaaaa'+res)
+                         tmp = tmp +  ' = ' + res
+			if (msg){
+			$('#msg-body').html(tmp)
+			$('#input-text').val('')
+			};
+                  })
+		})
+		$('#bt-reset').on('click',function(){
+			$('#msg-body').html('')
+			$('#input-text').val('')
+		})
+
+   $(document).on('click','.delete-btn',function(){
+        var name= $(this).attr('data-name')
+        swal({   
+              title: "Are you sure?",   
+              text: "Your will not be able to recover this imaginary file!",   
+              type: "warning",   
+              showCancelButton: true,   
+              confirmButtonColor: "#DD6B55",   
+              confirmButtonText: "删除",   
+              closeOnConfirm: false 
+          }, 
+        function(){   
+         $.get('/passchange?change=delete&name='+name,function(res){
+             if (res=='ok'){
+                getpasslist()
+                swal("delete success", "", "success"); 
+             }else{
+                 swal("Delete failed!", "", "error")
+              }
+          })
+        });
+
+    })
+
+                $(document).on('click','.update-btn',function(){
+                         var name=$(this).attr('data-name')
+                         var pass=$(this).attr('data-pass')
+                         var email=$(this).attr('data-email')
+                         var sex=$(this).attr('data-sex')
+                         var age=$(this).attr('data-age')
+                         $('#my-modal').modal('show')
+                         $('#updatename').val(name)
+                         $('#updatepass').val(pass)
+                         $('#updateemail').val(email)
+                         $('#updateage').val(age)
+                   $(document).on('click','#btn-save',function(){
+                        var name =$('#updatename').val()
+                        var pass =$('#updatepass').val()
+                        var email =$('#updateemail').val()
+                        var age =$('#updateage').val()
+                        if(name && pass && email && age && sex){
+                           $.get('/passchange?change=update&name='+name+'&pass='+pass+'&email='+email+'&age='+age+'&sex='+sex,function(res){
+                            if(res=='ok'){
+                               getpasslist()
+                               swal("Update success!", "", "success")
+                              }else{
+                                 swal("Update failed!", "", "error")
+                             }
+                          })
+                        }else{
+                          alert('error')
+                         }
+                   }) 
+                })
+
+
+  </script>
+</body>
+</html>
