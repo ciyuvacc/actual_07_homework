@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <form action="/calculate/" method="post">
+            计算式：<input type="text" name="formula" value="{{formula}}"/> <br />
+            <input type="submit" value="计算" /> <br />
+            {% if show_result or show_result == 0 %}
+            <span style="color:red">计算结果是：{{show_result}}</span><br />
+            {% endif %}
+        </form>
+    </body>
+</html>

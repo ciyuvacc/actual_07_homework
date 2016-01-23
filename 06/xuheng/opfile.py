@@ -1,6 +1,6 @@
 __author__ = 'XuHeng'
 #coding=utf-8
-#对存储文件的读写查操作
+#对存储文件的读写查操作,手机号码检测
 
 import os
 
@@ -27,4 +27,22 @@ def check_key(username):
         return True
     else:
         return False
+
+
+
+def check_phone_num(telephone):
+        phone_fix=['130','131','132','133','134','135','136','137','138','139','150','151','152','153','156','158','159','170','183','182','185','186','188','189']
+        if len(telephone)<>11:
+                return "手机号码为11位"
+        else:
+                if  telephone.isdigit():
+                        if telephone[:3] in phone_fix:
+                                return True
+                        else:
+                                return "手机号码无效"
+                else:
+                        return "手机号码为整数，请检查"
+
+
+
 
