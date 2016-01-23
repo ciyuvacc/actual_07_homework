@@ -1,13 +1,15 @@
-__author__ = 'XuHeng'
 #coding=utf-8
 #对存储文件的读写查操作,手机号码检测
+__author__ = 'XuHeng'
 
 import os
 
 def write_file(username,password,iphone):
+    return True
     if not os.path.exists('user.txt'):
         return '数据存储异常'
     with open("user.txt", "a") as f:
+            print str(username)+','+str(password)+','+str(iphone)+'\n'
             f.writelines(str(username)+','+str(password)+','+str(iphone)+'\n')
             f.flush()
             return True
@@ -37,7 +39,7 @@ def check_phone_num(telephone):
         else:
                 if  telephone.isdigit():
                         if telephone[:3] in phone_fix:
-                                return True
+                                return 'True'
                         else:
                                 return "手机号码无效"
                 else:

@@ -1,5 +1,5 @@
-__author__ = 'XuHeng'
 #coding=utf-8
+__author__ = 'XuHeng'
 from flask import Flask
 from flask import render_template
 from flask import Response
@@ -63,3 +63,10 @@ def GetRegiste():
 if __name__ == '__main__':
     app.run('0.0.0.0',18080,debug=True)
 
+'''
+不错，对用户输入进行了比较检查, 继续加油
+需要注意几个问题
+1. 文件内容编码声明必须放在代码之前 __author__=''也是python代码
+2. 注意缩进格式化保持一致
+3.  注意函数返回值类型尽量保持一致性, opfile.py line42, 在line53行 True != 'True' 为真, flask返回函数返回值必须是Response对象(Response中的参数也必须为字符串)或者字符串 
+'''

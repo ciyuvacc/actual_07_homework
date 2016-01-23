@@ -3,7 +3,7 @@ from flask import Flask
 from flask import request
 from flask import render_template
 from flask import redirect
-from logshow import *
+#from logshow import *
 from user import *
 from operation import *
 
@@ -68,4 +68,10 @@ def result():
 
 
 if __name__ == ('__main__'):
-    app.run(host='192.168.59.128',debug=True)
+    app.run(host='0.0.0.0',debug=True)
+
+
+'''
+不错，已经引入了bootstrap作为自己的页面样式，继续加油
+注意: 在代码里面做一个必要的安全检查比,如line48行, 如现在user.txt文件中有空行，在split后根据索引获取内容会报错
+'''
