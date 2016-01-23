@@ -42,6 +42,7 @@ def index():
     for key, value in data.items():
         if username == key and password == value:
             return redirect('/user/')
+            #return render_template('user.html', file=data)
     return render_template('login.html')
                
 
@@ -68,3 +69,11 @@ def user():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 #注册后,在文件里,密码显示为None导致新注册的无法登录
+
+'''
+不错，一定要跟着节奏走, 哪怕写代码有问题，但是慢慢改就回有进步, 继续加油
+
+问题：
+1. 注册后密码显示为None,  原因见57行, 看看html提交的密码name是什么?
+2, 登陆成功应该跳转到用户列表的页面，但是现在在44行重定向到/user/上，应该使用render_template('user.html', file=data), file是你在user.html需要使用的，但是file是python的内建关键函数, 避开使用他
+'''
