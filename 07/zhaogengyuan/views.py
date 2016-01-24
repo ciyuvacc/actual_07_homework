@@ -24,6 +24,8 @@ def login():
 						Loginerror='用户名或密码错误', \
 						Loginusername=username, \
 						Loginpassword=password)
+@app.route('/register/')
+
 @app.route('/users/')
 def users():
     return '登录成功'
