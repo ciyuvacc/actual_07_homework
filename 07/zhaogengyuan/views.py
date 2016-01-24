@@ -11,10 +11,7 @@ import models
 app=Flask(__name__)
 @app.route('/')
 def index():
-    return render_template('index.html', \
-						Loginerror='用户名或密码错误', \
-						Loginusername=username, \
-						Loginpassword=password)
+    return render_template('index.html')
 
 @app.route('/login/', methods=["POST"])
 def login():
@@ -23,7 +20,10 @@ def login():
     if models.validate_user_login(username,password):
         return redirect('/users/')
     else:
-        return redirect('/')
+    return render_template('index.html', \
+						Loginerror='用户名或密码错误', \
+						Loginusername=username, \
+						Loginpassword=password)
 @app.route('/users/')
 def users():
     return '登录成功'
