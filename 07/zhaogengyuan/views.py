@@ -3,6 +3,9 @@ from flask import Flask
 from flask import render_template   
 from flask import request
 from flask import redirect
+import sys
+reload(sys)
+sys.setdefaultencoding=('utf-8')
 import models
 
 app=Flask(__name__)
@@ -20,7 +23,7 @@ def login():
         return redirect('/')
 @app.route('/users/')
 def users():
-    return 'Login Success'
+    return '登录成功'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8888,debug=True)
