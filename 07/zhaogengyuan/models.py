@@ -10,7 +10,7 @@ def validate_user_login(username,password):
             db=gconf.DB_DATABASE, \
             charset=gconf.DB_CHARSET)
     cur = conn.cursor()
-    count = cur.execute('SELECT * FROM user where username=%s and password=%s', \
+    count = cur.execute('SELECT * FROM user where username=%s and password=md5(%s)', \
             (username,password))
     cur.close()
     conn.close()

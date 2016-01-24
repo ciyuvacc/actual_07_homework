@@ -3,14 +3,20 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Flask Learn</title>
+		<style type="text/css">
+		.error{
+	        color:red;
+		}
 	</head>
 	<body>
 	<input class="btn_login" type="button" value="用户登录"/>
 	<input class="btn_register" type="button" value="用户注册"/>
-	
+	{% if loginerror %}
+		<div class="error">{{loginerror}}</div>
+	{% endif %}
 	<form id="login" action="/login/" method="post">
-	用户名: <input type="text" name="username" /><br/>
-	密码: <input type="password" name="password" /><br/>
+	用户名: <input type="text" name="username" value="{{loginusername}}"/><br/>
+	密码: <input type="password" name="password" value="{{loginpassword}}"/><br/>
 	
 	<input type="submit" value="登录" />
 	</form>

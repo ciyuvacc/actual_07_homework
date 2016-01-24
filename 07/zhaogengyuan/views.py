@@ -11,7 +11,10 @@ import models
 app=Flask(__name__)
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', \
+						Loginerror'用户名或密码错误', \
+						Loginusername=username, \
+						Loginpassword=password)
 
 @app.route('/login/', methods=["POST"])
 def login():
