@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Flask Learn</title>
+	</head>
+	<body>
+	<input class="btn_login" type="button" value="用户登录"/>
+	<input class="btn_register" type="button" value="用户注册"/>
+	
+	<form id="login" action="/login/" method="post">
+	用户名: <input type="text" name="username" /><br/>
+	密码: <input type="password" name="password" /><br/>
+	
+	<input type="submit" value="登录" />
+	</form>
+	
+	<form class="register" action="/register/" method="post">
+	用户名: <input type="text" name="username" /><br/>
+	密码: <input type="password" name="password" /><br/>
+	年龄: <input type="text" name="age" /><br/>
+	地址: <input type="text" name="address" /><br/>
+
+
+	<input type="submit" value="注册" />
+	</form>
+	<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript">
+	jQuery(document).ready(function() {
+	jQuery("#login").show();
+	jQuery(".register").hide();
+		jQuery(".btn_login").bind('click',function(){
+			jQuery("#login").show();
+			jQuery(".register").hide();
+		});
+		jQuery(".btn_register").bind('click', function(){
+			jQuery('.register').show();
+			jQuery("#login").hide();
+		})
+	});
+	</script>
+	</body>
+</html>
