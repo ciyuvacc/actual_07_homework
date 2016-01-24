@@ -12,7 +12,7 @@ app=Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html', \
-						Loginerror'用户名或密码错误', \
+						Loginerror='用户名或密码错误', \
 						Loginusername=username, \
 						Loginpassword=password)
 
