@@ -41,10 +41,9 @@ def index():
     data = file_name('name.txt')    
     for key, value in data.items():
         if username == key and password == value:
-            return redirect('/user/')
-            #return render_template('user.html', file=data)
+            files = filename('name.txt')
+            return render_template('user.html', file=files)
     return render_template('login.html')
-               
 
 @app.route('/user/',methods=['GET','POST'])
 def user():
@@ -55,22 +54,26 @@ def user():
         IPhone = request.args.get('IPhone')
     else:
         name = request.form.get('name')
-        pwd = request.form.get('pwd')
+        pwd = request.form.get('password')
         email = request.form.get('email')
-        IPhone = request.form.get('IPhone')  
-    with open('name.txt','a') as handle:
-        handle.write('%s %s %s %s\n' % (name, pwd, email, IPhone))
-        return "注册成功"
-        
-##    files = filename('name.txt')
-##    return render_template('user.html', file=files)
+        IPhone = request.form.get('IPhone')
+        with open('name.txt','a') as handle:
+            handle.write('%s %s %s %s\n' % (name, pwd, email, IPhone))
+    return redirect('/successful/')
+
+
+@app.route('/successful/')
+def successful():
+    return "注册成功"
+    
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-#注册后,在文件里,密码显示为None导致新注册的无法登录
 
 '''
+#1,错误是注册时候，密码为None,以及注册后，跳转页面问题，已改正代码。
+
 不错，一定要跟着节奏走, 哪怕写代码有问题，但是慢慢改就回有进步, 继续加油
 
 问题：
