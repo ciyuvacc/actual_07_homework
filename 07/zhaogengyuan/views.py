@@ -25,8 +25,7 @@ def login():
 						Loginusername=username, \
 						Loginpassword=password)
 @app.route('/register/')
-
-@app.route('/users/')
+    username = request.form.get('username')
 def users():
     return '登录成功'
 
