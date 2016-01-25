@@ -5,16 +5,17 @@
 		<title>Flask Learn</title>
 		<style type="text/css">
 		.error{
-	        color:red;
+	            color:red;
 		}
 		.success{
-			color:green;
+	     	    color:green;
 		}
 		</style>
 	</head>
 	<body>
 	<input class="btn_login" type="button" value="用户登录"/>
 	<input class="btn_register" type="button" value="用户注册"/>
+	{{loginerror}}
 	{% if loginerror %}
 		<div class="error">{{loginerror}}</div>
 	{% endif %}
