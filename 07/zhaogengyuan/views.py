@@ -1,7 +1,7 @@
 #encoding: utf-8
 import sys
 reload(sys)
-sys.setdefaultencoding=('utf-8')
+sys.setdefaultencoding('utf-8')
 from flask import Flask
 from flask import render_template   
 from flask import request
@@ -26,17 +26,24 @@ def login():
 			loginusername=username, \
 			loginpassword=password)
 						
-@app.route('/register/')
+@app.route('/register/', methods=["POST"])
 def register():
     username = request.form.get('username','')
     password = request.form.get('password','')
     age = request.form.get('age','')
     address = request.form.get('address','')
-    if models.validate_user_register(username,password,age,address):
-        return redirect('/register/')
+    if models.query_user(username):
+        return render_template('index.html', \
+                        register_error='注册失败，用户名重复', \
+                        username=username)
     else:
-        return render_template('index.html')
-		
+
+        if models.validate_user_add(username,password,age,address):
+            return '注册成功, %s ' % models.query_user(username)
+        else:
+            return render_template('index.html')
+
+@app.route('/users/')		
 def users():
     return '登录成功'
 

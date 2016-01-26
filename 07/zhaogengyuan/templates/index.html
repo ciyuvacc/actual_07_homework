@@ -15,7 +15,6 @@
 	<body>
 	<input class="btn_login" type="button" value="用户登录"/>
 	<input class="btn_register" type="button" value="用户注册"/>
-	{{loginerror}}
 	{% if loginerror %}
 		<div class="error">{{loginerror}}</div>
 	{% endif %}
@@ -25,7 +24,10 @@
 	
 	<input type="submit" value="登录" />
 	</form>
-	
+
+	{% if register_error %}
+		<div class="error">{{register_error}}</div>
+	{% endif %}	
 	<form class="register" action="/register/" method="post">
 
 	用户名: <input type="text" name="username" /><br/>
