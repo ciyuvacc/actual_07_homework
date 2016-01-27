@@ -65,7 +65,7 @@ def register():
     password = request.form.get('password', '')
     telephone = request.form.get('telephone', '')
 
-    # 检查用户提交的数据
+    # 对用户唯一性，手机号正确性检查
     ok, result = models.validate_user_add(username, password, telephone)
     
     # 如果检查通过则添加到文件中

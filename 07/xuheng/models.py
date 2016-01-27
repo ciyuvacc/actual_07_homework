@@ -59,20 +59,26 @@ def validate_user_login(username, password):
 def validate_user_add(username, password, telephone):
     if username == '' or password == '':
         return False, '用户名和密码不能为空'
-    cursor = get_conn()
-    n = cursor.execute('select username from user where username="'+username+'"')
-    cursor.close()
-    if n:
-        return False, '用户已注册'
+    if telephone == '':
+        return False, '用户名和密码不能为空'
+    ok,result=validate_user_phone(telephone)
+    if ok:
+        cursor = get_conn()
+        n = cursor.execute('select username from user where username="'+username+'"')
+        cursor.close()
+        if n:
+            return False, '用户已注册'
+        else:
+            return True, ''
     else:
-        return True, ''
+        return ok,result
 
 
 #检查手机号
 def validate_user_phone(telephone):
         phone_fix=['130','131','132','133','134','135','136','137','138','139','150','151','152','153','156','158','159','170','183','182','185','186','188','189']
         if len(telephone)<>11:
-                return False,"手机号码为11位"
+                return False,"手机号码必须11位"
         else:
                 if  telephone.isdigit():
                         if telephone[:3] in phone_fix:
