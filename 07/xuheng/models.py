@@ -97,10 +97,12 @@ def add_user(username, password, telephone):
         return True
     else:
         return False
+
 def updata_user(username, password, telephone):
     cursor = get_conn()
     sql = "update user set password=%s,telephone=%s where username=%s "
     param = (password,telephone,username)
+    print param
     n = cursor.execute(sql,param)
     print n
     cursor.close()

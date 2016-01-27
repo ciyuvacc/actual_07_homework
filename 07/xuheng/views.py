@@ -8,6 +8,7 @@ from flask import Flask              #创建Flask APP对象
 from flask import request            #用于获取用户提交的数据
 from flask import render_template    #加载模板
 from flask import redirect           #重定向到其他url
+from flask import Response
 
 # 导入自定义的模块
 import models
@@ -113,7 +114,7 @@ def updata():
     username = request.form.get('username', '')
     password = request.form.get('password', '')
     telephone = request.form.get('telephone', '')
-
+    print username,password,telephone
     #执行更新操作
     ok, result = models.validate_user_phone(telephone)
 
@@ -126,7 +127,8 @@ def updata():
                 ok = False
                 result = '更新失败'
 
-    return render_template('login.html', ok=ok, result=result, register_username=username, password=password, telephone=telephone)
+    return  Response(result)
+    #return render_template('login.html', ok=ok, result=result, register_username=username, password=password, telephone=telephone)
 
 
 
