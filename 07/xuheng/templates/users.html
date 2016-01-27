@@ -10,6 +10,7 @@
                 <th>用户名</th>
                 <th>密码</th>
                 <th>联系电话</th>
+                <th>操作</th>
             </thead>
             <tbody>
                 {% if users %}  
@@ -18,8 +19,8 @@
                             <td>{{user['username']}}</td>
                             <td>{{user['password']}}</td>
                             <td>{{user['telephone']}}</td>
-                            <td><a href="/updata/{{user['username']}}" >updata</a></td>
-                            <td><a href="/delete/{{user['username']}}" >Delete</a></td>
+                            <td><a href="/updata_user/?username={{user['username']}}" >更新</a></td>
+                            <td><a href="/delete/?username={{user['username']}}" >删除</a></td>
                         </tr>
                     {% endfor %}
                 {% else %}

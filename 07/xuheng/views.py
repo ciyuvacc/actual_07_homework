@@ -25,7 +25,7 @@ def index():
     return render_template('login.html')
 
 #updata-page
-@app.route('/update_user/')
+@app.route('/updata_user/')
 def update_user():
     params = request.args if request.method == 'GET' else request.form
     username = params.get('username', '')

@@ -7,13 +7,11 @@
 <body>
 <form role="form" id="main_input_box" method="POST" action="/updata/">
 <label>
-    {% for user in userinfo %}
-			用户名: <input type="text" name="username" value="{{user['username']}}"/><br/>
-			密码:<input type="password" name="password" value="{{user['password']}}"/> <br/>
-			手机号: <input type="text" name="telephone" value="{{user['telephone']}}"/><br/>
+			用户名: <input type="text" name="username" value="{{userinfo['username']}}" disabled="true" /><br/>
+			密码:<input type="password" name="password" value="{{userinfo['password']}}"/> <br/>
+			手机号: <input type="text" name="telephone" value="{{userinfo['telephone']}}"/><br/>
 </label>
-    {% endfor %}
-    <input type="submit" value="注册"/>
+    <input type="submit" value="更新"/>
 
 </form>
 
