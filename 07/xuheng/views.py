@@ -25,7 +25,7 @@ def index():
     # 返回templates目录下的login.html模板中的内容
     return render_template('login.html')
 
-#updata-page
+#跳转用户更新页面
 @app.route('/updata_user/')
 def update_user():
     params = request.args if request.method == 'GET' else request.form
@@ -107,7 +107,7 @@ def delete():
         return render_template('login.html', error='删除失败', login_username=username)
 
 
-#更新用户信息
+#更新用户
 @app.route('/updata/', methods=['POST'])
 def updata():
     # 从request.form中获取username、password、telephone信息
@@ -127,7 +127,7 @@ def updata():
                 ok = False
                 result = '更新失败'
 
-    return  Response(result)
+    return Response(result)
     #return render_template('login.html', ok=ok, result=result, register_username=username, password=password, telephone=telephone)
 
 

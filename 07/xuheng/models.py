@@ -7,12 +7,9 @@ def get_conn():
     conn.autocommit(1)
     cursor = conn.cursor()
     return cursor
-# #连接
-# conn=MySQLdb.connect(host=config.DB_HOST,user=config.DB_USER,passwd=config.DB_PASSWD,db=config.DB_DATABASE,charset=config.DB_CHARSET)
-# #开启自动提交
-# conn.autocommit(1)
+
 # #创建用户表
-# sql = "create table if not exists user(id INT(10) not null  auto_increment,username varchar(30) primary key, password varchar(30),telephone INT (11),address VARCHAR (30))"
+# sql = "create table if not exists user(id INT(10) not null  auto_increment,username varchar(30),password varchar(30),telephone INT (11),address VARCHAR (30),primary key(id))"
 # cursor.execute(sql)
 # #写入测试数据
 # sql = "insert into user(username,password,telephone,address) values(%s,%s,%d,%s)"
@@ -98,6 +95,7 @@ def add_user(username, password, telephone):
     else:
         return False
 
+#更新用户信息
 def updata_user(username, password, telephone):
     cursor = get_conn()
     sql = "update user set password=%s,telephone=%s where username=%s "
@@ -117,12 +115,10 @@ def updata_user(username, password, telephone):
 
 # 测试的代码
 if __name__ == '__main__':
-    print get_user('xuheng')
-    #print del_user('xuheng')
-    #print validate_user_login('xuheng','xuheng123')
-    #print add_user('lisi','lisi123','13336181920')
-    #print updata_user('lisi','lisi123','13333333')
-    # print validate_user('pc', '123')
-    # print validate_user('woniu', '123')
-    # print validate_user('woniu', '123456')
-    # print add_user('test', '123456', '12345687998')
+    print add_user('lisi','lisi123','13336181920')
+    print validate_user_add('lisi','lisi123','13336181920')
+    print validate_user_login('lisi','lisi123')
+    print updata_user('lisi','lisi123','13333333')
+    print get_user('lisi')
+    print del_user('lisi')
+
