@@ -25,7 +25,7 @@ def login():
 			loginerror='用户名或密码错误', \
 			loginusername=username, \
 			loginpassword=password)
-						
+		
 @app.route('/register/', methods=["POST"])
 def register():
     username = request.form.get('username','')
@@ -36,16 +36,47 @@ def register():
         return render_template('index.html', \
                         register_error='注册失败，用户名重复', \
                         username=username)
+    elif isNone(password):
+        return render_template('index.html', \
+                        register_error='注册失败，密码为空', \
+                        password=password)
+    elif isNotNum(age):
+        return render_template('index.html', \
+                        register_error='注册失败，年龄必须为数字', \
+                        username=username, \
+                        password=password, \
+                        age=age, \
+                        address=address)
     else:
-
-        if models.validate_user_add(username,password,age,address):
-            return '注册成功, %s ' % models.query_user(username)
-        else:
-            return render_template('index.html')
+        models.validate_user_add(username,password,age,address)
+        return '注册成功'
 
 @app.route('/users/')		
 def users():
     return '登录成功'
+
+@app.route('/userlist/')
+def userlist():
+    return render_template('list.html')
+
+def isNone(string):
+    if string:
+        return False
+    else:
+        return True
+
+def isNotNum(num):
+    try:
+        x = int(num)
+    except TypeError:
+        return True
+    except ValueError:
+        return True
+    except Exception, e:
+        return True
+    else:
+        return False
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8888,debug=True)

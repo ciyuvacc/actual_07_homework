@@ -27,35 +27,42 @@ def close(cur,conn):
     cur_close(cur)
     conn_close(conn)
 
-def validate_user_login(username,password):
+def check_sql(sql):
+    sql = sql
     conn = get_conn()
     cur = get_cur(conn)
-    count = cur.execute('SELECT * FROM user where username=%s and password=md5(%s)', \
-            (username,password))
-    close(cur,conn)
-    return count != 0
-
-def validate_user_add(username,password,age,address):
-    conn = get_conn()
-    cur = get_cur(conn)
-    count = cur.execute('INSERT INTO user(username,password,age,address) VALUES(%s,md5(%s),%s,%s)', \
-                        (username,password,age,address))
+    result = cur.execute(sql)
     conn.commit()
     close(cur,conn)
-    return count !=0
+    return result
 
-def query_user(username):
+def query_sql(sql):
+    sql = sql
     conn = get_conn()
     cur = get_cur(conn)
-    count = cur.execute('SELECT username FROM user where username=%s', (username,))
-    rows = cur.fetchall()
+#    result = cur.fetchall()
+    result = cur.execute(sql)
     close(cur,conn)
-    if rows is not None:
-        for row in rows:
-            tmpstr = row[0]
-            if tmpstr == username:
-                return True
-            else:
-                return False
-    else:
-        return True
+    return result
+
+def validate_user_login(username,password):
+    username = username
+    password = password
+    sql = 'SELECT * FROM user where username=\'%s\' and password=md5(\'%s\')' % (username,password)
+    result = query_sql(sql)
+    return result != 0
+
+def validate_user_add(username,password,age,address):
+    username = username
+    password = password
+    age = age
+    address = address
+    sql = 'INSERT INTO user(username,password,age,address) VALUES(\'%s\',md5(\'%s\'),\'%s\',\'%s\')' % (username,password,age,address)
+    result = check_sql(sql)
+    return result !=0
+
+def query_user(username):
+    username = username
+    sql = 'SELECT username FROM user where username=\'%s\'' % (username,)
+    result = query_sql(sql)
+    return result != 0
