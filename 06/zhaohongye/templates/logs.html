@@ -1,0 +1,28 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<td>ip</td>
+				<td>url</td>
+				<td>code</td>
+				<td>count</td>
+			</tr>
+		</thead>
+		<tbody>
+		{% for log in logs%}
+			<tr>
+				<td>{{log[2][0]}}</td>
+				<td>{{log[1]}}</td>
+				<td>{{log[0]}}</td>
+				<td>{{log[2][1]}} </td>
+			</tr>
+		{% endfor  %}
+		</tbody>
+	</table>
+</body>
+</html>
