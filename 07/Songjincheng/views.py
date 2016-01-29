@@ -9,15 +9,17 @@ import models
 
 app = Flask(__name__)
 
+#访问登录页面
 @app.route('/')
 def index():
     return render_template('login.html')
 
+#登录
 @app.route('/login/', methods=['POST'])
 def login():
     username = request.form.get('username')
     password = request.form.get('password') 
-    if models.mysql_select(username, password):
+    if models.mysql_userlogin(username, password):
         return redirect('/user/')
     else:
         return render_template('login.html', \
@@ -25,7 +27,7 @@ def login():
                    Loginusername=username, \
                    Loginpassword=password)
 
-
+#注册：
 @app.route('/register/', methods=['GET','POST'])
 def register():
     if request.method == 'GET':
@@ -42,8 +44,8 @@ def register():
         IPhone = request.form.get('IPhone')
         sensitive_str = ['~','@','#','$','%','^','&','*','(',')','_','.']
         if username not in sensitive_str:
-            if username == '' and password == '':
-                if models.mysql_select(username, password):
+            if username != '' and password != '':
+                if models.mysql_userlogin(username, password):
                     return render_template('login.html', \
                             registererror='用户名或密码存在', \
                             registerusername=username, \
@@ -52,6 +54,8 @@ def register():
                         #age必须是数字，这里做下转换对应数据库中的int类型
                     if models.mysql_add(username, password, int(age), email, IPhone):
                         return redirect('/successful/') 
+                    else:
+                        return "注册失败"
             else:
                 return render_template('login.html', \
                              Username='用户名或密码不能为空')
@@ -59,7 +63,7 @@ def register():
             return render_template('login.html', \
                 sensitive_str='用户名含有敏感字符，请重新输入:')
 
-
+#增加：
 @app.route('/increase/', methods=['GET','POST'])
 def increase():
     if request.method == 'POST':
@@ -75,7 +79,10 @@ def increaseone():
         IPhone = request.form.get('IPhone')
         if models.mysql_add(username, password, age, email, IPhone):
             return "添加成功"
+        else:
+            return "添加失败"
 
+#删除:
 @app.route('/delete/',methods=['GET','POST'])
 def delete():
     if request.method == 'POST':
@@ -85,12 +92,10 @@ def delete():
 def deleteone():
     if request.method == 'POST':
          #根据ID来删除用户名
-#        id = request.form.get('id')
         username = request.form.get('username')
         data = models.mysql_select(username)
         for i in data:
         #根据ID来删除用户名
-#        if models.mysql_del(id):
             id = i[0]
             if models.mysql_del(id):
                 return "删除成功"
@@ -98,21 +103,14 @@ def deleteone():
                 return "删除失败"
 
 
-@app.route('/Modify/', methods=['GET', 'POST'])
-def Modify():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        user = models.mysql_update1(username)
-        return render_template('update.html', users=user)
-
-
-@app.route('/gengxin/', methods=['GET','POST'])
+#修改
+@app.route('/update/', methods=['GET','POST'])
 def genxin():
     if request.method == 'POST':
         return render_template('update.html')
 
 
-@app.route('/option/',methods=['GET','POST'])
+@app.route('/updateone/',methods=['GET','POST'])
 def option():
     if request.method == 'POST':
         username = request.form.get('user')
@@ -125,7 +123,7 @@ def option():
         else:
             return "修改失败"
 
-
+#查找
 @app.route('/select/',methods=['GET','POST'])
 def select():
     if request.method == 'POST':
@@ -134,7 +132,7 @@ def select():
         return render_template('select.html', pages=data)
 
 
-
+#验证用户名密码后，展示内容
 @app.route('/user/', methods=['GET','POST'])
 def user():
     if request.method == 'GET':
@@ -143,7 +141,7 @@ def user():
     else:
         render_template('update.html')
 
-
+#注册回显
 @app.route('/successful/')
 def successful():
     return "注册成功"
