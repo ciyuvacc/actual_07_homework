@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>用户列表</title>
+    </head>
+    <body>
+        <!--
+        涉及app.route
+            R1. /index/          HOMEPAGE， 加载用户登陆页面(login.html)
+            R2. /login/          提交表单，处理用户登录页面表单
+            R3. /listUser/       显示用户列表, 加载用户列表页面(list.html)
+            R4. /createUser/     点击添加用户按钮，加载用户创建表单页面(create.html)
+            R5. /addUser/        处理用户信息添加到db中（处理create.html提交表单）
+            R6. /modifyUser/     点击修改用户链接，加载用户修改表单页面(update.html)
+            R7. /updateUser/     处理用户信息更新db中的数据(处理update.html提交的表单)
+            R8. /deleteUser/     处理删除用户链接
+        涉及template
+            T1. login.html       用户登录页面
+            T2. list.html        用户列表页面
+            T3. create.html      用户创建页面
+            T4. update.html      用户修改页面
+                注意在删除和修改时都使用用户名作为唯一标识, 因此用户名在不能进行更新
+                在update.html中只用<input type="hidden" name="username" value="{{user['username']}}" />不现实用户名信息，其他都使用input type="text"标签
+
+        首次访问: R1 -> T1
+        登陆流程: T1 -> R2 -> R3 -> T2 
+        查询流程: T2 -> R3 -> T2
+        创建流程: T2 -> R4 -> T3 -> R5 -> R3 -> T2
+        更新流程: T2 -> R6 -> T4 -> R7 -> R3 -> T2
+        删除流程: T2 -> R8 -> R3 -> T2
+        -->
+        <!--
+            1. 请求由app.route('/listUser/', methods=["POST"])处理
+            2. 从form中拿出query，拼接sql语句，查询username（如果query为空则查询所有用户信息）
+            3. 将结果使用render_template('list.html', users=users)返回
+        -->
+        <form action="/listUser/" method="post">
+            <input type="text" name="query" value="{{query}}"/>
+            <input type="submit" value="查询"/>
+            <!--
+                1. 请求由app.route('/createUser/')处理
+                2. 将结果使用render_template('create.html')返回
+                3. 在create.html中添加用户信息提交表单到/addUser/
+                4. 从from中拿出usrename, password, tel, add等信息存储到db中
+                5. 使用redirect重定向到/listUser/
+            -->
+            <a href="/createUser/">添加</a>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>手机号</th>
+                    <th>家庭住址</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--
+
+                遍历所有用户信息 
+                users = [{username:XX, tel: XXX, address: XXXX}, {username:XX, tel: XXX, address: XXXX}, ...]
+                -->
+                <!--
+                {% for user in users %}
+                -->
+                <tr>
+                    <!-- 从user中拿出用户名信息 -->
+                    <td>AAAAA<!-- {{user['name']}} --></td>
+                    <!-- 从user中拿出手机号信息 -->  
+                    <td>13456789<!-- {{user['tel']}} --></td>
+                    <!-- 从user中拿出家庭地址信息 -->
+                    <td>XXXXXXXX<!-- {{user['address']}} --></td>
+                    <td>
+                        <!-- 
+                        1. 提交修改用户信息到app.route('/modifyUser/'), 并提交用户名username
+                        2. 从args中拿出username，并从db中查找用户信息
+                        3. 将结果使用render_template('update.html', user=user)返回
+                        4. 在update.html中显示用户信息，编辑后将表单提交到/udpateUser/
+                        5. 从form中拿出所有信息，根据用户名修改提交的数据
+                        6. 使用redirect重定向到/listUser/
+                        -->
+                        <a href="/modifyUser/?username=AAAAA">修改</a>
+                        <!--
+                        <a href="/modifyUser/?username={{user['name']}}">修改</a>
+                        -->
+
+                        <!-- 
+                        1. 提交删除用户信息到app.route('/deleteUser/'), 并提交用户名username
+                        2. 从args中拿出username，并从db中删除用户信息
+                        3. 使用redirect重定向到/listUser/
+                        -->
+                        <a href="/deleteUser/?username=AAAAA">删除</a>
+                        <!--
+                        <a href="/deleteUser/?username={{user['name']}}">删除</a>
+                        -->
+                    </td>
+                </tr>
+                <!--
+                {% endfor %}
+                -->
+            </tbody>
+
+        </table>
+
+    </body>
+</html>
