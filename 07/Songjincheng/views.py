@@ -139,7 +139,7 @@ def user():
         body = models.mysql_cat()
         return render_template('bodys.html', pages=body)
     else:
-        render_template('update.html')
+        return render_template('bodys.html')
 
 #注册回显
 @app.route('/successful/')
