@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Flask Learn</title>
+	<script type="text/javascript" src="../static/jquery-1.9.1.js"></script>
+                <script type="text/javascript" src="../static/jquery-1.9.1.min.js"></script>
+    </head>
+ <script>
+function deluser(userid){
+if(!confirm("确定要删除" +userid +"用户吗??")){
+
+return false;
+}
+        $("#userid").val(userid);
+          var data=[];
+          data=$("#users").serializeArray();
+        $.ajax({
+          type:"post",url:'/deluser?userid='+userid,
+          data:data,        
+          error:function(){
+          alert('操作失败');
+        },
+        success:function(msg){
+            if(msg=='true'){
+                alert('操作成功！');
+                $("#"+userid).remove();
+            }else{
+               alert('操作失败!');
+            }
+        }
+    });
+}
+function changeage(obj){
+$(obj).parent().find("input").attr("type","text");
+$(obj).css("display","none");
+}
+
+function mode(userid,obj){
+var age ;
+var address;
+$(obj).parent().parent().find("input").each(function(index,ele){
+
+  if(index==0){
+  age =$(ele).val();
+            $(ele).parent().find("span").css("display","block").text(age);
+
+ $(ele).attr("type","hidden");
+  }
+   if(index==1){
+  address =$(ele).val();
+     $(ele).parent().find("span").css("display","block").text(address);
+$(ele).attr("type","hidden");
+  }
+   
+ 
+});
+$("#age").val(age);
+$("#address").val(address);
+$("#userid").val(userid);
+    var data=[];
+    data=$("#users").serializeArray();
+    $.ajax({
+        type:"post",url:'/modeuser',
+        data:{userid:userid,modeage:age,modeaddress:address},        
+        error:function(){
+            alert('修改失败');
+        },
+        success:function(msg){
+            if(msg=='true'){
+                alert('修改成功！');
+            }else{
+               alert('修改失败!');
+            }
+        }
+    });
+}
+       </script>
+    <body>
+    <input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回上一页">
+     <form id="users" action="/users/" method="post" style="text-align:center" >
+	<input type="hidden" id="userid"  name="userid" value="" />
+	<input type="hidden" id="age"  name="age" value="" />
+	<input type="hidden" id="address"  name="address" value="" />
+        <table>
+            <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>密码</th>
+                    <th>年龄</th>
+                    <th>地址</th>
+                    <th>删除操作</th>
+                    <th>修改操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr id='{{user[0]}}'>
+                        <td>{{user[0]}}</td>
+                        <td>{{user[1]}}</td>
+                        <td><span  onclick= "changeage(this)">{{user[2]}}</span><input type="hidden"  name="age" value="{{user[2]}}" /></td>
+                        <td><span onclick="changeage(this)">{{user[3]}}</span><input type="hidden"  name="address" value="{{user[3]}}" /></td>
+                        <td><input  type="button" value="删除" onclick="deluser('{{user[0]}}')"></td>
+                        <td><input  type="button" value="修改" onclick="mode('{{user[0]}}',this)"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       </form>
+    </body>
+</html>

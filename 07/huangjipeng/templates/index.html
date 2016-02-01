@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="uft-8">
+	<title>用户登陆练习</title>
+	<style type="text/css">
+	.error{
+	color:red;
+	}
+	.success{
+	color:green
+	}
+        .login{
+        color:green
+	}
+	</style>
+</head>
+<body bkground="/root/user/img/1.jpg">
+    <form style="text-align:center;vertical-align:middle;font-size:24px" >
+	    <input class="bth_login" type="button"  style="font-size:24px" value="用户登陆"/>
+	    <input class="bth_register" type="button" style="font-size:24px" value="用户注册"/>
+	    </form> </br></br>
+	    <form id="login" action="/login/" method="post"  style="text-align:center;vertical-align:middle;font-size:14px">
+                {% if loginerror %}
+                  <div class="error">{{loginerror}}</div>
+		{% endif %}
+		用户名:<input type="text" name="username" value="{{loginusername}}"/> <br><br/>
+		密码:    <input type="password" name="password" value="{{loginpassword}}"/><br> <br/>
+			     <input  type="submit" class="login" value="登陆"/>
+	</form> 
+	<form class="register" action="/register/" method="post" style="text-align:center">
+		{% if registerinfo %}
+                                <div class="
+                                {% if registerok %}
+                                success
+                                {% else %}
+                                error
+                                {% endif %}
+                                ">{{registerinfo}}</div>
+                 {% endif %}
+		用户名:<input type="text" name="username" value="{{usernameinfo}}"/><br><br/>
+		密码： <input type="password" name="password" value="{{passwordinfo}}"/><br> <br/>
+		年龄： <input type="text" name="age" value="{{ageinfo}}"/><br><br/>
+		地址： <input type="text" name="address" value="{{addressinfo}}"/><br> <br/>
+		       <input type="submit" value="注册"/>
+	</form>
+	
+		<script type="text/javascript" src="../static/jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="../static/jquery-1.9.1.min.js"></script>
+		
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				{% if registerinfo %}
+				jQuery(".register").show();
+				jQuery("#login").hide();
+				{% else %}
+				jQuery("#login").show();
+                                jQuery(".register").hide();
+				{% endif %}
+				jQuery(".bth_login").bind('click',function() {
+					jQuery("#login").show();
+					jQuery(".register").hide();
+				});
+				jQuery(".bth_register").bind('click',function() {
+					jQuery(".register").show();
+					jQuery("#login").hide();
+				});
+			});
+		</script>
+		</body>
+</html>

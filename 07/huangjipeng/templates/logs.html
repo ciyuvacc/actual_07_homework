@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Flask Learn</title>
+	<script type="text/javascript" src="../static/jquery-1.9.1.js"></script>
+         <script type="text/javascript" src="../static/jquery-1.9.1.min.js"></script>
+         <style type="text/css">
+        .error{
+        color:red;
+        }
+            </style>
+    </head>
+    <body>
+
+     <form id="logs" action="/logs" method="post" >
+		<div> 请输入一个数：</div>
+	       <input name="count" type="text">
+                <input type="submit" value="查询"> <input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回上一页">
+              {% if bbinfo %}
+                                <div class="error">{{bbinfo}}</div>
+                 {% endif %}
+        <table border = "1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户IP</th>
+                    <th>地址</th>
+                    <th>状态</th>
+                    <th>访问次数</th>
+                    <th>时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                    <tr id='{{log[0]}}'>
+                        <td>{{log[0]}}</td>
+                        <td>{{log[1]}}</td>
+                        <td>{{log[2]}}</td>
+                        <td>{{log[3]}}</td>
+                        <td>{{log[4]}}</td>
+                        <td>{{log[5]}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       </form>
+    </body>
+</html>

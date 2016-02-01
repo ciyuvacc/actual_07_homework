@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习</title>
+       <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+        <form id="userpwd" action="/userpwd" method="post">
+          {% if info %}
+           <div>提示：{{info}}</div> 
+          {% endif%}
+         <div>用户名 ：{{setusername}}</div> 
+	          <input name="setusername" type="hidden" value="{{setusername}}"/> <br/>
+	 新密码 ：<input name="setpassword" type="password" value="{{setpassword}}"/> <br/>
+		  <input type="submit" value="修改"/>
+	</form>
+	<input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回上一页">
+</body>
+</html>
