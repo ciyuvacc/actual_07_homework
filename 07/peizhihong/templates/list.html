@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>用户列表页面</title>
+    </head>
+    <body>
+        {{info}}
+    	<form action='/listUser/' method='post'>
+    		<input type="text" name="query" value="{{query}}" />
+    		<input type="submit" value="查询" />
+    		<a href="/createUser">添加用户</a>
+    	</form>
+
+        <br />
+
+        {% if users%}
+        	<table>
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>姓名</th>
+                        <th>手机</th>
+                        <th>邮箱</<th>
+                        <th>年龄</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users%}
+                    <tr>
+                        <td>{{user[0]}}</td>
+                        <td>{{user[1]}}</td>
+                        <td>{{user[3]}}</td>
+                        <td>{{user[4]}}</td>
+                        <td>{{user[5]}}</td>
+                        <td>
+                            <a href="/modifyUser/?username={{user[1]}}">修改</a>
+                            <a href="/deleteUser/?username={{user[1]}}">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        {% endif %}
+        <br />
+        <input type="button" id="return_bt" value="回到首页" onClick="location.href='/index'">
+    </body>
+</html>
