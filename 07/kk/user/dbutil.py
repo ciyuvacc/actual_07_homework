@@ -29,8 +29,6 @@ def execute_sql(sql, args=(), is_fetch=False):
                                 db=gconf.DB_NAME, charset=gconf.DB_CHARSET)
 
         _cur =_conn.cursor()                                # 步骤2
-        print sql
-        print args
         _rt_cnt = _cur.execute(sql, args)                   # 步骤3
         if is_fetch:                                        # 步骤4  判断是否为查询还是修改动作
             _rt_fetch = _cur.fetchall()                         # 查询操作
