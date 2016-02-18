@@ -1,13 +1,6 @@
 #encoding: utf-8
 
-import MySQLdb
-
-DB_HOST = 'localhost'
-DB_PORT = 3306
-DB_USER = 'root'
-DB_PASSWD = '881019'
-DB_NAME = 'test'
-DB_CHARSET = 'utf8'
+import dbutil
 
 
 '''
@@ -46,27 +39,11 @@ def read_log(path):
     return stat_dict
 
 def store2db(stat_dict, n=-1): 
-    _conn, _cur = None, None
-    _rt_cnt = 0
-    try:
-        # 步骤1
-        _conn = MySQLdb.connect(host=DB_HOST, port=DB_PORT, \
-                                user=DB_USER, passwd=DB_PASSWD, \
-                                db=DB_NAME, charset=DB_CHARSET)
-
-        _cur =_conn.cursor() 
-        for key, value in stat_dict.items():
-            ip, url, code = key
-            _rt_cnt += _cur.execute(SQL_INSERT, (ip, url, code, value))
-        _conn.commit()
-    except BaseException, e:
-        print str(e)                                        # 打印异常
-    finally:
-        if _cur is not None:
-            _cur.close()
-        if _conn is not None:
-            _conn.close()
-    return _rt_cnt
+    args_list = []
+    for key, value in stat_dict.items():
+        ip, url, code = key
+        args_list.append((ip, url, code, value))
+    return dbutil.bulk_execute_sql(SQL_INSERT, args_list)
 
 if __name__ == '__main__':
     stat_dict = read_log('www_access_20140823.log')
