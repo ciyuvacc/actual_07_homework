@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block main %}
+     <div class="row">
+       <div class="col-md-2"></div>
+       <div class="col-md-10">
+        <table id='table-pass' class='table table-bordered table-striped mt20 table-hover table-condensed' >
+        </table>
+ 
+       </div>
+     </div>
+
+
+       <div class="col-md-2"></div>
+       <div class="col-md-10 mt20">
+          <form  class="form-inline">
+           <div class="form-group">
+ 
+             <label for="exampleInputName2">请输入查询行数</label>
+             <input type="text" class="form-control" id="countinput" placeholder="Count" name='count'>
+           </div>
+           <button id='select-btn' type="button" class="btn btn-success">查询</button>
+         </form>
+       </div>
+     </div>
+           <div class="row">
+       <div class="col-md-2"></div>
+       <div class="col-md-10">
+          <div id="testdiv" class='mt20'>
+	    <div id="slider"></div>
+	     top<span id="res">1</span>
+            </div>
+        <table id='table-content' class='table table-bordered table-striped  table-hover table-condensed' >
+        </table>
+ 
+       </div>
+     </div>
+     </div>
+
+
+
+    <script src="{{url_for('static',filename='js/jquery.js')}}"></script>
+    <script src="{{url_for('static',filename='js/jquery-ui.js')}}"></script>
+     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+  <script>
+
+       function getlist(count){
+         console.log('list'+count)
+         $.getJSON('/showlog?count='+count,function(res){
+            len_list=res.len
+             var tmp='<tr><th>id</th><th>code</th><th>uri</th><th>ip</th><th>count</th></tr>'
+             var id =1
+             $.each(res.data,function(index,value){
+             tmp += '<tr><th>'+id+'</th><td>' +value[0]+'</td><td>'+value[1]+'</td><td>' +value[2]+'</td><td>' +value[3]+'</td><</tr>'
+             id +=1
+           })
+             $('#table-content').html(tmp)
+         })
+
+       }
+
+    var len_list=1
+    var count = 10 
+    var tmpcount =10
+    $( "#slider" ).slider({
+        slide: function( event, ui ) {
+                count = ui.value
+                $('#res').html(ui.value)
+           
+        },
+        max:100,
+        min:1,
+        animate: "fast"
+    }).on('mouseout',function(){
+       if(tmpcount!=count){
+          console.log('tmpcount'+tmpcount)
+          getlist(count)
+        }
+        tmpcount = count
+    });
+
+     getlist(count)
+   $(document).on('click','#select-btn',function(){
+         count =$('#countinput').val()
+         getlist(count)
+         $('#countinput').val('')
+         
+    })
+
+
+
+  </script>
+
+
+
+{% endblock %}
+

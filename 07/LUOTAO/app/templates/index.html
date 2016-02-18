@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+{% block main %}
+<!--add button-->
+
+ <div id='page-body' class="container">
+    <div class="row">
+      <div class="col-md-9 col-md-offset-1">
+          <form class='form-inline'>
+            <div class="form-group">
+               <label>Name</label>
+               <input type="text" id='name-input' class='form-contorl'>
+             </div>
+            <div class="form-group">
+               <label>IP</label>
+               <input type="text" id='ip-input' class='form-contorl'>
+             </div>
+            <div class="form-group">
+               <label>Memery</label>
+               <span id='mem-slide'></span>
+               <label id='mem-value'>1G</label>
+             </div>
+            <div class="form-group">
+               <label>End_data</label>
+               <input type="text" id='date-input' class='form-contorl'>
+             </div>
+                <button id='add-btn' type='button' class="btn btn-success">add</button>
+           </form>
+        <table class="table table-bordered table-striped  table-hover table-condensed" id="host-table">
+        </table>
+      </div>
+    </div>
+ </div>
+
+
+
+    <div class="row" id="pagefenye">
+      <div class="col-md-1">
+
+      </div>
+      <div class="col-md-8">
+          <nav>
+              <ul class="pagination">
+              </ul>
+            </nav>
+      </div>
+    </div>
+
+
+
+<div class="modal fade" id='my-moda2'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">修改主机信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+           <label for="exampleInputName2">id</label>
+            <input type="text" class="form-control" id="updateid" placeholder="ID" name='id' disabled>
+            <label for="exampleInputName1">Host</label>
+            <input type="text" class="form-control" id="updatehost" placeholder="HostName" name='host'>
+            <label for="exampleInputName1">IP</label>
+            <input type="email" class="form-control" id="updateip" placeholder="IP" name='ip'>
+            <label for="exampleInputName1">Memery</label>
+            <input type="text" class="form-control" id="updatemem" placeholder="Age" name='age'>
+            <label for="exampleInputName1">End_Date</label>
+            <input type="text" class="form-control" id="updateend_date" placeholder="End_Date" name='end_date'>
+
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" id="btn-save" class="btn btn-primary" data-dismiss="modal">保存修改</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="main" style="height:400px"></div>
+
+<script src='/static/js/jquery.js'> </script>
+<script src='/static/js/jquery-ui.js'></script>
+ <script src="/static/js/sweetalert.min.js"></script>
+<!--<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script> -->
+<script>
+function init_chart(){
+     $.getJSON('/showdata',function(res){
+        var myChart = echarts.init(document.getElementById('main')); 
+        
+        var option = {
+    title : {
+        text: '网站访问状态统计',
+        subtext: '纯属虚构',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        data:res.legend
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true, 
+                type: ['pie', 'funnel'],
+                option: {
+                    funnel: {
+                        x: '25%',
+                        width: '50%',
+                        funnelAlign: 'left',
+                        max: 1548
+                    }
+                }
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'访问来源',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:res.data
+        }
+    ]
+};
+
+
+
+        // 为echarts对象加载数据 
+        myChart.setOption(option); 
+
+   })
+}
+
+
+
+
+
+//init_chart()
+
+ 
+$( "#date-input" ).datepicker({dateFormat: "yy-mm-dd"});
+
+    function getlist(){ 
+          var page={{page}}
+        $.get('/hostmanger?page='+page,function(res){
+                var res =JSON.parse(res)
+                var data=res.data
+                console.log(data)
+                var row_header = '<tr><th>ID</th><th>主机名</th><th>IP</th><th>内存</th><th>过期时间</th><th>操作</th></tr>'
+                $.each(data,function(index,value){
+                row_header += '<tr>'
+                row_header += '<td>'+value[0]+'</td>'
+                row_header += '<td>'+value[1]+'</td>'
+                row_header += '<td>'+value[2]+'</td>'
+                row_header += '<td>'+value[3]+'</td>'
+                row_header += '<td>'+value[4]+'</td>'
+                row_header += '<td><button data-id="'+value[0]+'" data-host="'+value[1]+'"  class="btn btn-danger  del-btn">删除</button>'
+                row_header += '<button data-id="'+value[0]+'" data-host="'+value[1]+'"  data-ip="'+value[2]+'" data-mem="'+value[3]+'" data-ent="'+value[4]+'"  class="btn btn-info  update-btn">更新</button></td>'
+                row_header += '<tr>'
+                })
+                $('#host-table').html(row_header)
+                
+                var pagedata= res.repage
+            var tmp11='<li><a href="?page='+pagedata[0]+'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'
+            var tmp22=''
+            for (var i=1;i<=pagedata[2];i++){
+                 tmp22+='<li><a href="?page='+i+'">'+i+'</a></li>'
+                };
+            var tmp33 = '<li><a href="?page='+pagedata[1]+'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>'
+            tmp00= tmp11 + tmp22 + tmp33
+           $('.pagination').html(tmp00)
+ 
+        })               
+     }
+getlist()
+
+
+
+
+  $('#add-btn').on('click',function(){
+    var host = $('#name-input').val()
+    var mem = count
+    var ip = $('#ip-input').val()
+    var end_date = $('#date-input').val()
+    if(host && mem && ip && end_date){
+       $.post('/hostmanger',{"host":host,"mem":mem,"ip":ip,"end_date":end_date,"change":"add"},function(res){
+         if (res=='ok'){
+              swal('success','add success','success')
+              getlist()
+         }else{
+              swal('Failed','请检查注册信息！！','error')
+              getlist()
+              
+        }
+       })
+    }else{
+       alert('请将信息填入完整！！')
+    }     
+
+  }) 
+ $(document).on('click','.del-btn',function(){
+    var id= $(this).attr('data-id')
+    var host= $(this).attr('data-host')
+        swal({   
+              title: "Are you sure?",   
+              text: "Your will not be able to recover this imaginary file!",   
+              type: "warning",   
+              showCancelButton: true,   
+              confirmButtonColor: "#DD6B55",   
+              confirmButtonText: "删除",   
+              closeOnConfirm: false 
+          }, 
+     function(){ 
+      $.post('/hostmanger',{"host":host,"id":id,"change":"delete"},function(res){
+        if(res=='ok'){
+          getlist() 
+          swal('success!')
+       }else{
+          swal('error!')
+       }
+      })
+    });
+
+ })
+
+                $(document).on('click','.update-btn',function(){
+                         var id=$(this).attr('data-id')
+                         var host=$(this).attr('data-host')
+                         var mem=$(this).attr('data-mem')
+                         var ip=$(this).attr('data-ip')
+                         var end_date=$(this).attr('data-ent')
+                         $('#my-moda2').modal('show')
+                         $('#updateid').val(id)
+                         $('#updatehost').val(host)
+                         $('#updateip').val(ip)
+                         $('#updateend_date').val(end_date)
+                         $('#updatemem').val(mem)
+                   $(document).on('click','#btn-save',function(){
+                        var id =$('#updateid').val()
+                        var host =$('#updatehost').val()
+                        var ip =$('#updateip').val()
+                        var mem =$('#updatemem').val()
+                        var end_date =$('#updateend_date').val()
+                        if(id && host && ip && mem && end_date){
+                           swal({   
+                            title: "Are you sure?",   
+                            text: "Your will not be able to recover this imaginary file!",   
+                            type: "warning",   
+                            showCancelButton: true,   
+                            confirmButtonColor: "#DD6B55",   
+                            confirmButtonText: "修改",   
+                            closeOnConfirm: false 
+                            }, 
+                          function(){
+                              $.post('/hostmanger',{"host":host,"id":id,"mem":mem,"end_date":end_date,"ip":ip,"change":"update"},function(res){
+                            if(res=='ok'){
+                               getlist()
+                               swal("Update success!", "", "success")
+                              }else{
+                                 swal("Update failed!", "", "error")
+                             }
+                          })
+                          });
+                        }else{
+                          alert('请将信息填入完整！！')
+                         }
+                   }) 
+                })
+
+
+     var count = ''
+     $( "#mem-slide" ).slider({
+            slide: function( event, ui ) {
+                count = ui.value
+                 $('#mem-value').html(ui.value+'G')
+            },
+             step:2,
+             max:128,
+             min:2,
+             animate: "fast"
+            })
+
+
+
+
+
+
+</script>
+{% endblock %}

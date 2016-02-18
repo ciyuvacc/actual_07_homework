@@ -1,0 +1,125 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>自动化运维系统</title>
+
+    <!-- Bootstrap core CSS -->
+    <!--link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet"-->
+    <link href="{{ url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/sweetalert.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/jquery-ui.css')}}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <!--link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet"-->
+    <link href="{{ url_for('static',filename='css/dashboard.css')}}" rel="stylesheet">
+    <style>
+      .delete-btn {
+	cursor:pointer;
+        color:blue;
+	}
+      .update-btn {
+	cursor:pointer;
+        color:blue;
+	}
+    </style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">  <!--导航-->
+      <div class="container-fluid">
+	  
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">DevOps</a>
+        </div>
+		
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">welcome {{username}}</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li class="dropdown" id="accountmenu"> <!--dropdown of script-->
+                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings<b class="caret"></b></a>
+                   <ul class="dropdown-menu">
+                            <li><a href="#">PHP</a></li>
+                            <li><a href="#">MySQL</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">JavaScript</a></li>
+                    </ul>
+            </li><!--end dropdown-->
+            <li><a href="/logout">logout</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div><!--collapse end-->
+		
+      </div><!--container-fluid end-->
+    </nav>   <!--nav end-->
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">  <!--left sidebar-->
+          <ul class="nav nav-sidebar">
+            <li class="active" id="cmdb"><a href="#">CMDB系统 <span class="sr-only">(current)</span></a></li>
+            <li class="cmdb-menu"><a href="/index">主机管理</a></li>
+            <li class="cmdb-menu"><a href="/index">机柜管理</a></li>
+          </ul>
+		  <ul class="nav nav-sidebar">
+	        <li class="active" id="monitor"><a href="#">工具使用</a></li>
+            <li class="monitor-menu"><a href="/jisuanqi">计算器</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+	        <li class="active" id="code"><a href="#">日志系统</a></li>
+            <li class="code-menu"><a href="/log">日志查询</a></li>
+          </ul>
+           <ul class="nav nav-sidebar">
+            <li class="active" id="zhanghu"><a href="#">账户管理</a></li>
+             <li class="user-menu"><a href="/upuser">修改账号</a></li>
+             <li class="user-menu"><a href="#">管理账户</a></li>
+           </ul>
+
+        </div><!--left sidebar end-->
+		
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">  <!--main-->
+        {% block main %}  
+	
+       {% endblock %}
+        </div> <!--main end-->
+      </div><!---row end-->
+    </div> <!--container-fluid-->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+   <!-- <script src=".js/jquery.min.js"></script>
+    <script src=".js/bootstrap.min.js"></script>
+  -->
+    <!--script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script-->
+    <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/sweetalert.min.js')}}"></script>
+    <!--script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script-->
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+   <script type="text/javascript">
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+            $('#cmdb').click(function(){ 
+                $('.cmdb-menu').slideToggle("slow");  
+            });
+
+            $('.monitor-menu').hide(); // default hide() 
+	    $('#monitor').click(function(){ //click hide or show
+                $('.monitor-menu').slideToggle("slow");  
+            });
+
+            $('#code').click(function(){ 
+                $('.code-menu').slideToggle("slow");  
+            });
+
+
+            $('.user-menu').hide();  
+            $('#zhanghu').click(function(){ 
+                $('.user-menu').slideToggle("slow");  
+            });
+
+        });
+   </script>

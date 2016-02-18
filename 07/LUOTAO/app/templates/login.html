@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="./favicon.ico">
+
+    <title>Please Sign In</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/sweetalert.css">
+
+    <!-- Custom styles for this template -->
+    <link href="http://v3.bootcss.com/examples/signin/signin.css" rel="stylesheet"> 
+    <style type="text/css">
+      #body {
+          padding-top: 40px;
+          padding-bottom: 40px;
+          background-color: #BB8585;
+      }
+    </style>
+  </head>
+
+  <body id="body">
+    <div class="container">
+
+      <form class="form-signin" action="/login" method="post">
+        <h2 class="form-signin-heading">Please login in</h2>
+        <label for="inputuser" class="sr-only">username</label>
+        <input type="text" id="inputuser" class="form-control" placeholder="账号" required autofocus name="username">
+        <label for="inputpwd" class="sr-only">Password</label>
+        <input type="password" id="inputpwd" class="form-control" placeholder="密码" required name="password">
+        <div class="checkbox">
+          <label>
+            <input id="rem-ckb" type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <div>
+        
+        <button id='btn-sign' class="btn btn-lg btn-primary" type="button">注册</button>
+        <button id='btn-log' class="btn btn-lg btn-primary" type="submit">登陆</button>
+        </div>
+               {% if message %}
+                <p style="color:red">{{ message }}</p>
+               {% endif %}
+      </form>
+     
+    </div> <!-- /container -->
+
+
+<div class="modal fade" id='my-modal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">请输入用户信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+           <label for="exampleInputName2">姓名</label>
+                    <input type="text" class="form-control" id="updatename" placeholder="Username" name='username'>
+
+            <label for="exampleInputName1">密码</label>
+                    <input type="text" class="form-control" id="updatepass" placeholder="Password" name='passwd'>
+            <label for="exampleInputName1">邮箱</label>
+                    <input type="email" class="form-control" id="updateemail" placeholder="Email" name='email'>
+            <label for="exampleInputName1">年龄</label>
+                   <input type="text" class="form-control" id="updateage" placeholder="Age" name='age'>
+            <label for="exampleInputName1">地址</label>
+                   <input type="text" class="form-control" id="updateaddress" placeholder="Address" name='address'>
+            <label for="inputsex" class=" control-label">性别</label>
+                 <label class="radio-inline">
+                    <input type="radio" name="userSex" id="userSex"  value="0"> 女
+                 </label>
+                 <label class="radio-inline">
+                    <input type="radio" name="userSex" id="userSex"  value="1"> 男
+                 </label>
+
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="buton" id="btn-save" class="btn btn-primary" data-dismiss="modal">提交</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+ <script src='/static/js/jquery.min.js'></script>
+ <script src="/static/js/sweetalert.min.js"></script>
+ <script src='/static/js/bootstrap.js'></script>
+ <script>
+
+    $(document).on('click','#btn-sign',function(){
+            $('#updatename').val('')
+            $('#updatepass').val('')
+            $('#updateemail').val('')
+            $('#updateage').val('')
+            $('#updateaddress').val('')
+            $('#my-modal').modal('show')
+        $(document).on('click','#btn-save',function(){
+            var name =$('#updatename').val()
+            var pass =$('#updatepass').val()
+            var email =$('#updateemail').val()
+            var age =$('#updateage').val()
+            var address =$('#updateaddress').val()
+            var sex = document.getElementsByName('userSex')
+            var sexid 
+        if(name && pass && email && age && sex && address){
+              for (var i =0;i<sex.length;i++){
+                 if(sex[i].checked)
+                 sexid =i;
+                }
+               console.log(sexid)
+          $.post('/sign',{"username":name,"password":pass,"email":email,"age":age,"address":address,"sex":sexid},function(res){
+           if(res=='ok'){
+            swal("注册成功!", "", "success")
+            $('#inputuser').val(name)
+            }else{
+           $('#my-modal').modal('show')
+            swal("注册失败!", "", "error")
+            }          
+           })  
+         }else{
+         alert('请将信息填入完整！！')
+         $('#my-modal').modal('show')
+             $('#updatename').val(name)
+             $('#updatepass').val(pass)
+             $('#updateemail').val(email)
+             $('#updateage').val(age)
+             $('#updateaddress').val(address)
+          }       
+        })
+    })
+
+</script>
+</body>
+</html>

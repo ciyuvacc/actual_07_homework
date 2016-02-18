@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block main %}
+<li><a href="#">welcome {{username}}</a></li>
+  <body id="body">
+    <div class="container">
+
+     <div class="form-horizontal">
+            <div class="form-group">
+              <label for="inputuser" class="col-sm-3 control-label">账号</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputuser1" placeholder="Username" name="username" disabled>
+              </div>
+            </div>
+              <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">密码</label>
+              <div class="col-sm-5">
+                <input type="password" class="form-control" id="inputpass" placeholder="Password" name="password">
+              </div>
+            </div>
+              <div class="form-group">
+              <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
+              <div class="col-sm-5">
+                <input type="email" class="form-control" id="inputemail" placeholder="Email" name="email">
+              </div>
+            </div>
+              <div class="form-group">
+              <label for="inputsex" class="col-sm-3 control-label">性别</label>
+              <div class="col-sm-5">
+                      <label class="radio-inline">
+                        <input type="radio" name="userSex" id="userSex" value="0"> 女
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" name="userSex" id="userSex" value="1"> 男
+                      </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">年龄</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputage" placeholder="Age" name="age">
+              </div>
+            </div>
+              <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">地址</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputaddress" placeholder="Address" name="address">
+              </div>
+              </div>
+            <div class="form-group">
+              <div class="col-sm-offset-7 col-sm-10">
+                <button type="button" id="upuser-btn" class="btn btn-info">确认修改</button>
+              </div>
+              </div>
+
+            </div>
+
+    </div>
+    </div> <!-- /container -->
+
+
+   <  <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+     <script src="{{url_for('static',filename='js/sweetalert.min.js')}}"></script> 
+  <script>
+ function getlist(){
+    var name = "{{username}}"
+    $.post('/changeuser',{'username':name,'change':"show"},function(res){
+    var res =JSON.parse(res)
+    console.log(res[0][1])
+    $('#inputuser1').val(name)
+    $('#inputpass').val('')
+    $('#userSex').attr('checked','checked')
+    $('#inputage').val(res[0][2])
+    $('#inputaddress').val(res[0][3])
+    $('#inputemail').val(res[0][5])
+    })
+}
+  getlist()
+   $(document).on('click','#upuser-btn',function(){
+            var name =$('#inputuser1').val()
+            var pass =$('#inputpass').val()
+            var email =$('#inputemail').val()
+            var age =$('#inputage').val()
+            var address =$('#inputaddress').val()
+            var sex = document.getElementsByName('userSex')
+            console.log(sex)
+            var sexid 
+        if(name && pass && email && age && sex && address){
+              for (var i =0;i<sex.length;i++){
+                 if(sex[i].checked)
+                 sexid =i;
+                }
+               console.log(sexid)
+          $.post('/changeuser',{"username":name,"password":pass,"email":email,"age":age,"address":address,"sex":sexid,"change":"update"},function(res){
+           if(res=='ok'){
+            swal("更新成功!", "", "success")
+            $('#inputuser').val(name)
+            }else{
+           $('#my-modal').modal('show')
+            swal("更新失败!", "", "error")
+            }          
+           })  
+         }else{
+         alert('请将信息填入完整！！')
+         $('#my-modal').modal('show')
+             $('#updatename').val(name)
+             $('#updatepass').val(pass)
+             $('#updateemail').val(email)
+             $('#updateage').val(age)
+             $('#updateaddress').val(address)
+          }       
+   
+    })
+  
+
+
+
+  </script>
+
+
+
+{% endblock %}
+
