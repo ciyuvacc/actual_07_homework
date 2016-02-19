@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Flask Learn</title>
+		<style type="text/css">
+		.error{
+	            color:red;
+		}
+		.success{
+	     	    color:green;
+		}
+		</style>
+	</head>
+	<body>
+	{% if login_success %}
+	<div class="success">
+
+	{{login_success}}
+	<br />
+	<a href="/listUser/">listUser</a>
+	</div>
+	{% endif %}
+    {% if login_error %}
+    <div class="error">
+
+    {{login_error}}
+    <br />
+    </div>
+    {% endif %}
+
+	<script type="text/javascript" src="{{url_for('static', filename='jquery.min.js')}}"></script>
+	<script type="text/javascript">
+	jQuery(document).ready(function() {
+	jQuery("#login").show();
+	jQuery(".register").hide();
+		jQuery(".btn_login").bind('click',function(){
+			jQuery("#login").show();
+			jQuery(".register").hide();
+		});
+		jQuery(".btn_register").bind('click', function(){
+			jQuery('.register').show();
+			jQuery("#login").hide();
+		})
+	});
+	</script>
+	</body>
+</html>
