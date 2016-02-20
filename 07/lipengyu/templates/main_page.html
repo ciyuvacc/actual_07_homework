@@ -1,0 +1,67 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+    <head> 
+          <meta charset="UTF-8"> 
+          <style type="text/css"> 
+          .error1{ 
+              color:red; 
+          } 
+          </style> 
+     </head> 
+         <body> 
+      <form class="add" action="/increase/" method="post"> 
+             <input type="submit" value="增加" /> 
+      </form> 
+         <form class="delete" action="/delete/" method="post"> 
+             <input type="submit" value="删除" /> 
+      </form> 
+         <form class="update" action="/update/" method="post"> 
+            <input type="submit" value="更改" /> 
+         </form> 
+         <form class="selete" action="/select/" method="post"> 
+             <input type="submit" value="查找" /> 
+         </form> 
+ 
+
+            <table> 
+            <thead> 
+       <tr> 
+           <td>username&nbsp;</td> 
+           <td>password&nbsp;</td> 
+           <td>age&nbsp;</td> 
+           <td>address&nbsp;&nbsp;&nbsp;</td> 
+       </tr> 
+       </thead> 
+            <tbody> 
+                  {% for user in pages %} 
+             <tr> 
+                <td>{{user[0]}}&nbsp;</td> 
+                <td>{{user[1]}}&nbsp;</td> 
+                <td>{{user[2]}}&nbsp;</td> 
+                <td>{{user[3]}}&nbsp;</td> 
+                  {% endfor %} 
+             </tr> 
+            </tbody> 
+            </table> 
+            <script type="text/javascript" src="/static/jquery-1.8.3.min.js"></script> 
+            <script type="text/javascript"> 
+                $(document).ready(function(){ 
+                    // 隐藏修改部分 --> 
+                    $("#Modify").hide(); 
+                    // 隐藏btn_cancel 取消返回键  --> 
+                    $(".btn_cancel").hide(); 
+                    // 绑定btn_Modify 修改信息键 --> 
+                    $(".btn_Modify").bind('click', function(){ 
+                        $("#Modify").show(); 
+                        $(".btn_cancel").show(); 
+                        $(".btn_Modify").hide(); 
+                       }); 
+                    $(".btn_cancel").bind("click",function(){ 
+                        $("#Modify").hide(); 
+                        $(".btn_cancel").hide(); 
+                        $(".btn_Modify").show(); 
+                     });                
+                }); 
+            </script> 
+        </body> 
+ </html> 
