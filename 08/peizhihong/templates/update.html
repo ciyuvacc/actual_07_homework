@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>用户修改页面</title>
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+        <style type="text/css">
+            .error{
+                color:red;
+            }
+            body{
+                padding-top: 40px;
+                padding-bottom: 40px;
+                background-color: #eee;
+            }
+
+            .form-register{
+                max-width: 330px;
+                padding: 15px;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <form id="update" class="form-horizontal" action="/updateUser/" method="post">
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10 error">
+                        {{error}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">账号</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="username" class="form-control" id="username" placeholder="账号" value={{username}} readonly="true" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mobile" class="col-sm-2 control-label">手机</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="mobile" class="form-control" id="mobile" placeholder="手机" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label">邮箱</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="email" class="form-control" id="email" placeholder="邮箱" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="age" class="col-sm-2 control-label">年龄</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="age" class="form-control " id="age" placeholder="年龄" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-info btn-default">提交</button>
+                        <a href='/updateUser/' class="btn btn-info btn-default" role="button">返回</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </body>
+</html>

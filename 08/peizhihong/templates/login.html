@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>用户登录页面</title>
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+        <style type="text/css">
+            .error{
+                color:red;
+            }
+            .success{
+                color:green;
+            }
+            body{
+                padding-top: 40px;
+                padding-bottom: 40px;
+                background-color: #eee;
+            }
+            .form-signin{
+                max-width: 330px;
+                padding: 15px;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body> 
+        <div class="container">
+            <form class="form-signin" action="/login/" method="post">
+                <h2 class="form-signin-heading">用户登录</h2>
+                {% if error %}
+                    <p class="bg-danger">{{error}}</p>
+                {% endif %}
+                <div class="form-group">
+                    <input type="text" class="form-control" name="username" 
+                    value="{% if username %}{{username}}{% endif %}" placeholder="账号" />
+                    <input type="password" class="form-control" name="password" placeholder="密码" />
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+            </form>
+        </div>
+    </body>
+</html>
