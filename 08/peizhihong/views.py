@@ -121,6 +121,8 @@ def updateUser():
 		mobile = request.form.get('mobile')
 		email = request.form.get('email')
 		age = request.form.get('age')
+		if not password:
+			return render_template('update.html', username=name, error=u'密码必须填写')
 		# 年龄判断
 		if not age.isdigit():
 			return render_template('update.html', username=name, error=u'年龄必须为整数')
