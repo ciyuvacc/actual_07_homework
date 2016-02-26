@@ -2,47 +2,42 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Flask Learn</title>
+		<title>登陆</title>
+		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
 		<style type="text/css">
 		.error{
-	            color:red;
+			color:red;
 		}
 		.success{
-	     	    color:green;
+			color:green;
+		}
+		body {
+		  padding-top: 40px;
+		  padding-bottom: 40px;
+		  background-color: #eee;
+		}
+		.form-signin {
+		  max-width: 330px;
+		  padding: 15px;
+		  margin: 0 auto;
 		}
 		</style>
 	</head>
 	<body>
-	{% if login_success %}
-	<div class="success">
-
-	{{login_success}}
-	<br />
-	<a href="/listUser/">listUser</a>
-	</div>
-	{% endif %}
-    {% if login_error %}
-    <div class="error">
-
-    {{login_error}}
-    <br />
-    </div>
-    {% endif %}
-
-	<script type="text/javascript" src="{{url_for('static', filename='jquery.min.js')}}"></script>
-	<script type="text/javascript">
-	jQuery(document).ready(function() {
-	jQuery("#login").show();
-	jQuery(".register").hide();
-		jQuery(".btn_login").bind('click',function(){
-			jQuery("#login").show();
-			jQuery(".register").hide();
-		});
-		jQuery(".btn_register").bind('click', function(){
-			jQuery('.register').show();
-			jQuery("#login").hide();
-		})
-	});
-	</script>
+		<div class="container">
+			<form class="form-signin" action="/login/">
+				<h2 class="form-signin-heading">用户登录</h2>
+				{% if error %}
+				<p class="bg-danger">{{error}}</p>
+				{% endif %}
+			  	<div class="form-group">
+				  <input type="text" class="form-control" name="username" value="{{login_username}}" placeholder="用户名"/>
+			  	</div>
+			  	<div class="form-group">
+				  	<input type="password" class="form-control" name="password" placeholder="密码"/>
+			  	</div>
+			  	<button type="submit" class="btn btn-lg btn-primary btn-block">登录</button>
+			</form>
+		</div>
 	</body>
 </html>
