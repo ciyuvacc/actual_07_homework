@@ -215,7 +215,7 @@
                   </div>
                     <div class="modal-footer">
                         <div class="alert alert-success" role="alert" id="updatesuccess"></div>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel">取消</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button type="submit" class="btn btn-primary" id="btn-updatehost">更新</button>
                   </div>
             </form>
@@ -251,20 +251,20 @@
 {% block js %}
 $(document).ready(function() {
     // 添加主机
-    $('#addmem').slider({
+    $('#addmem,#oldmemory').slider({
     formatter: function(value) {
         return 'MEM: ' + value;
     }
     });
 
-    $('#adddisk').slider({                  // 添加滑条
+    $('#adddisk,#olddisk').slider({                  // 添加滑条
         formatter: function(value) {
             return 'DISK: ' + value;
         }
     });
     jQuery('#addhosterror').hide();
     jQuery('#addhostsuccess').hide();
-    $('#addnewhost').formValidation({
+    jQuery('#addnewhost').formValidation({
         framework: 'bootstrap',
             icon: {
             valid: 'glyphicon glyphicon-ok',
@@ -360,8 +360,9 @@ $(document).ready(function() {
       modal.find('#oldcpu').val(button.data('hostcpu'));
       modal.find('#oldos').val(button.data('hostos'));
     });
-    $('#updatehostinfo').formValidation({
+    jQuery('#updatehostinfo').formValidation({
         framework: 'bootstrap',
+        excluded: ':disabled',
             icon: {
             valid: 'glyphicon glyphicon-ok',
             invalid: 'glyphicon glyphicon-remove',
@@ -406,7 +407,6 @@ $(document).ready(function() {
         })          // 校验输入的信息是否正确
         .on('success.form.fv', function(e) {
             e.preventDefault();
-            //jQuery('#btn-updatehost').on('click', function() {
                var  hostid = jQuery('#hostid').val(),
                     hostname = jQuery('#oldhostname').val().replace(/(^\s*)|(\s*$)/g, ""),
                     hostip = jQuery('#oldip').val().replace(/(^\s*)|(\s*$)/g, ""),
@@ -437,14 +437,10 @@ $(document).ready(function() {
                         }
                     }, 'json');
 
-                jQuery('#btn-cancel').click(function() {            //点击取消按钮触发一个事件 reset form
-                      jQuery('#updatehostinfo').data('formValidation').resetForm(true);
-                });
-                //$('#updatehost').on('hidden.bs.modal', function (event) {
-                    //jQuery('#updatehostinfo').data('formValidation').resetForm(true);
-                  //  $('#updatehostinfo').data('formValidation').resetForm();
-                    //console.log('resetform');
-                //});
+                    //关闭dialog的时候触发事件(resetform)
+                    jquery('#updatehost').on('hidden.bs.modal', function () {
+                            $('#updatehostinfo').data('formValidation').resetForm();
+                    });
             });
     // 更新主机end
 
@@ -471,6 +467,7 @@ $(document).ready(function() {
                 }, 'json');
                   });
         });
+
     // end delete host
 
 
