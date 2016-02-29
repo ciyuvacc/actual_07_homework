@@ -1,0 +1,215 @@
+{% extends 'layout.html' %}
+{% block title %}用户管理{% endblock %}
+{% block useractive %}class="active"{% endblock %}
+{% block container %}
+<form action="/users/" method="post" class="form-inline ">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#adduser" >添加用户</button>
+    <div class="input-group">
+          <input type="text" placeholder="请输入用户名" class="form-control" name="query" value="{{ query }}"/>
+      <span class="input-group-btn">
+          <input type="submit" class="btn btn-primary" value="搜索"/>
+      </span>
+    </div>
+</form>
+<br>
+<table  class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>用户ID</th>
+            <th>用户名</th>
+            <th>密码</th>
+            <th>邮箱</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{user['id']}}</td>
+            <td>{{user['username']}}</td>
+            <td>{{user['password']}}</td>
+            <td>{{user['email']}}</td>
+            <td>{{user['create_time']}}</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateuser" data-username="{{user['username']}}" data-email="{{ user['email'] }}" data-id="{{user['id']}}">更新</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteuser" data-username="{{user['username']}}">删除</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+<!-- 更新用户信息-->
+<div class="modal fade" id="updateuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">更新信息</h4>
+      </div>
+      <div class="modal-body">
+       <form class="form-horizontal">
+        <div class="alert alert-danger" role="alert" id="error"></div>
+        <input type="hidden" id="id" name="id"/>
+        <div class="form-group">
+            <label for="password" class="col-sm-2 control-label">密码：</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" id="password" name='password'>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email" class="col-sm-2 control-label">邮箱：</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="email" name='email'>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="btn-update">更新</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 添加用户-->
+<div class="modal fade" id="adduser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+      </div>
+      <div class="modal-body">
+       <form class="form-horizontal">
+        <div class="alert alert-danger" role="alert" id="adderror"></div>
+          <div class="form-group">
+            <label for="username" class="col-sm-2 control-label" >用户名:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="addusername" name='username' placeholder="用户名">
+            </div>
+          </div>
+        <div class="form-group">
+            <label for="password" class="col-sm-2 control-label">密码:</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" id="addpassword" name='password' placeholder="密码">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="col-sm-2 control-label">邮箱:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="addemail" name='email'placeholder="邮箱">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="btn-adduser">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 删除用户-->
+<div class="modal fade" id="deleteuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">删除用户</h4>
+      </div>
+      <div class="modal-body">
+        确认要删除该用户吗？
+      </div>
+      <div class="modal-footer">
+          <div class="alert alert-success" role="alert" id="delsucess"></div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="btn-delete">删除</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+jQuery(document).ready(function() {
+    // 更新用户
+    jQuery('#updateuser').on('show.bs.modal', function (event) {
+      var button = jQuery(event.relatedTarget); //使用event.relatedTarget以及HTML的data-* 属性根据点击的是哪个按钮，多样化模态框的内容
+      var username = button.data('username');   //获取username的值根据html上面的data-username={user['username']}
+      var modal = jQuery(this);
+      jQuery('#error').hide();
+      modal.find('.modal-title').text('更新用户 ' + username + '信息');
+      modal.find('#id').val(button.data('id'));
+      modal.find('#password').val(button.data('password'));
+      modal.find('#email').val(button.data('email'));
+    });
+    jQuery('#btn-update').on('click', function() {
+        var id = jQuery('#id').val(),  // 获取id等于id的values值给新的变量id
+            password = jQuery('#password').val().replace(/(^\s*)|(\s*$)/g, ""),
+            email = jQuery('#email').val().replace(/(^\s*)|(\s*$)/g, "");
+            jQuery.post('/updateuser/', {
+                'id' : id,
+                'password' : password,
+                'email' : email
+            }, function(data){
+                console.log(data);
+                if(data['ok']) {
+                    jQuery('#updateuser').modal('hide');
+                    window.location.reload();
+                } else {
+                    jQuery('#error').text(data['result']);
+                    jQuery('#error').show();
+                }
+            }, 'json');
+    });
+
+    //添加用户
+    jQuery('#adduser').on('show.bs.modal',function (event){
+       jQuery('#adderror').hide();
+    });
+    jQuery('#btn-adduser').on('click',function() {
+        var username = jQuery('#addusername').val().replace(/(^\s*)|(\s*$)/g, ""),
+                password = jQuery('#addpassword').val().replace(/(^\s*)|(\s*$)/g, ""),
+                email = jQuery('#addemail').val().replace(/(^\s*)|(\s*$)/g, "");
+        jQuery.post('/adduser/',{
+           'username' : username,
+           'password' : password,
+           'email' : email
+        },function(data){
+            if(data['ok']) {
+                //jQuery('#adduser').modal('hide');
+                window.location.reload();
+            } else {
+                jQuery('#adderror').text(data['result']);
+                jQuery('#adderror').show();
+            }
+        }, 'json');
+    });
+
+    //删除用户
+    jQuery('#deleteuser').on('show.bs.modal', function (event) {
+     jQuery('#delsucess').hide();
+      var button = jQuery(event.relatedTarget);
+      var username = button.data('username');
+      var modal = jQuery(this);
+      modal.find('.modal-title').text('删除用户 ' + username + '信息');
+        jQuery('#btn-delete').on('click', function() {
+            jQuery.post('/deleteuser/', {
+                'username' : username
+            }, function(data){
+                if(data['ok']) {
+                    jQuery('#delsucess').text(data['result']);
+                    jQuery('#delsucess').show();
+                    setTimeout(function(){
+                    window.location.reload(1);
+                    },500);
+                }
+            }, 'json');
+              });
+        });
+    });
+{% endblock %}

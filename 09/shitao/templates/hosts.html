@@ -1,0 +1,480 @@
+{% extends 'layout.html' %}
+{% block title %}主机管理{% endblock %}
+{% block hostactive %}class="active"{% endblock %}
+{% block container %}
+<form action="/hosts/" method="post" class="form-inline ">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addhost" >添加主机</button>
+    <div class="input-group">
+          <input type="text" placeholder="请输入主机名" class="form-control" name="query" value="{{ query }}"/>
+      <span class="input-group-btn">
+          <input type="submit" class="btn btn-primary" value="搜索"/>
+      </span>
+    </div>
+</form>
+<br>
+<table  class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>主机名</th>
+            <th>外网IP</th>
+            <th>内网IP</th>
+            <th>内存</th>
+            <th>硬盘</th>
+            <th>CPU</th>
+            <th>操作系统</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for host in hosts %}
+        <tr>
+            <td>{{host['id']}}</td>
+            <td>{{host['hostname']}}</td>
+            <td>{{host['ip']}}</td>
+            <td>{{host['lanip']}}</td>
+            <td>{{host['memory']}}</td>
+            <td>{{host['disk']}}</td>
+            <td>{{host['cpu']}}</td>
+            <td>{{host['os']}}</td>
+            <td>{{host['status']}}</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updatehost" data-hostid="{{host['id']}}" data-hostname="{{host['hostname']}}" data-hostip="{{host['ip']}}"
+                data-hostlanip="{{host['lanip']}}" data-hostmemory="{{host['memory']}}" data-hostdisk="{{host['disk']}}" data-hostcpu="{{host['cpu']}}" data-hostos="{{host['os']}}" data-hoststatus="{{host['status']}}">
+                    更新
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deletehost" data-delhostid="{{host['id']}}" data-delhostname="{{host['hostname']}}" >
+                    删除
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+        <div class="modal fade" id="addhost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加主机</h4>
+              </div>
+              <div class="modal-body">
+               <form class="form-horizontal" id="addnewhost">
+                <div class="alert alert-danger" role="alert" id="addhosterror"></div>
+                <div class="form-group">
+                    <label for="hostname" class="col-sm-2 control-label">主机名:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="addhostname" name='hostname' placeholder="主机名">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hostip" class="col-sm-2 control-label">外网IP:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="addhostip" name='hostip'placeholder="外网IP">
+                    </div>
+                  </div>
+                   <div class="form-group">
+                    <label for="hostlanip" class="col-sm-2 control-label">内网ip:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="addhostlanip" name='hostlanip'placeholder="内网ip">
+                    </div>
+                  </div>
+                   <div class="form-group">
+                    <label for="memory" class="col-sm-2 control-label">内存:</label>
+                    <div class="col-sm-10">
+                        <input id="addmem" data-slider-id='ex1Slider' type="text" data-slider-min="2" data-slider-max="20" data-slider-step="2" data-slider-value="14"/>
+                    </div>
+                  </div>
+                   <div class="form-group">
+                    <label for="disk" class="col-sm-2 control-label">硬盘:</label>
+                    <div class="col-sm-10">
+                      <input id="adddisk" data-slider-id='ex1Slider' type="text" data-slider-min="20" data-slider-max="1000" data-slider-step="50" data-slider-value="500"/>
+                    </div>
+                  </div>
+                   <div class="form-group">
+                    <label for="cpu" class="col-sm-2 control-label">cpu:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="addcpu" name='cpu'placeholder="cpu">
+                    </div>
+                  </div>
+                   <div class="form-group">
+                    <label for="os" class="col-sm-2 control-label">操作系统:</label>
+                    <div class="col-sm-10">
+                        <select  class="form-control" id="addos" name="os" >
+                          <optgroup label="Centos">
+                            <option value="Centos 6.5 64位">Centos 6.5 64位</option>
+                            <option value="Centos 6.5 32位">Centos 6.5 32位</option>
+                            <option value="Centos 7 64位">Centos 7 64位</option>
+                            <option value="Centos 7 64位">Centos 7 64位</option>
+                          </optgroup>
+                          <optgroup label="OpenSUSE">
+                            <option value="OpenSUSE 13.2 64位">OpenSUSE 13.2 64位</option>
+                            <option value="OpenSUSE 13.2 32位">OpenSUSE 13.2 32位</option>
+                            <option value="OpenSUSE 13.1 64位 Pro">OpenSUSE 13.1 64位 Pro</option>
+                            <option value="OpenSUSE 13.1 32位 Pro">OpenSUSE 13.1 32位 Pro</option>
+                          </optgroup>
+                          <optgroup label="Window Server">
+                            <option value="2008 R2 数据中心">2008 R2 数据中心</option>
+                            <option value="2012 R2 标准版">2012 R2 标准版</option>
+                            <option value="2012 R2 企业版">2012 R2 企业版</option>
+                          </optgroup>
+                        </select>
+                    </div>
+                  </div>
+                   <div class="form-group">
+                    <label for="status" class="col-sm-2 control-label">状态:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="addstatus" name='status'placeholder="状态">
+                    </div>
+                  </div>
+                <div class="modal-footer">
+                     <div class="alert alert-success" role="alert" id="addhostsuccess"></div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary" id="btn-addhost">添加</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <!-- 更新主机信息-->
+    <div class="modal fade" id="updatehost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">更新信息</h4>
+          </div>
+          <div class="modal-body">
+           <form class="form-horizontal" id="updatehostinfo">
+            <div class="alert alert-danger" role="alert" id="updateerror"></div>
+            <input type="hidden" id="hostid" name="hostid"/>
+            <div class="form-group">
+                <label for="oldhostname" class="col-sm-2 control-label">主机名：</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="oldhostname" name='oldhostname'>
+                </div>
+              </div>
+            <div class="form-group">
+                <label for="oldip" class="col-sm-2 control-label">外网ip：</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="oldip" name='oldip'>
+                </div>
+              </div>
+            <div class="form-group">
+                <label for="oldlanip" class="col-sm-2 control-label">内网ip：</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="oldlanip" name='oldlanip'>
+                </div>
+              </div>
+            <div class="form-group">
+                <label for="oldmemory" class="col-sm-2 control-label">内存：</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="oldmemory" name='oldmemory'>
+                </div>
+              </div>
+            <div class="form-group">
+                <label for="olddisk" class="col-sm-2 control-label">硬盘：</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="olddisk" name='olddisk'>
+                </div>
+              </div>
+            <div class="form-group">
+                <label for="oldcpu" class="col-sm-2 control-label">CPU：</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="oldcpu" name='oldcpu'>
+                </div>
+              </div>
+
+               <div class="form-group">
+                    <label for="oldos" class="col-sm-2 control-label">操作系统:</label>
+                    <div class="col-sm-10">
+                        <select  class="form-control" id="oldos" name="oldos">
+                          <optgroup label="Centos">
+                            <option value="Centos 6.5 64位">Centos 6.5 64位</option>
+                            <option value="Centos 6.5 32位">Centos 6.5 32位</option>
+                            <option value="Centos 7 64位">Centos 7 64位</option>
+                            <option value="Centos 7 64位">Centos 7 64位</option>
+                          </optgroup>
+                          <optgroup label="OpenSUSE">
+                            <option value="OpenSUSE 13.2 64位">OpenSUSE 13.2 64位</option>
+                            <option value="OpenSUSE 13.2 32位">OpenSUSE 13.2 32位</option>
+                            <option value="OpenSUSE 13.1 64位 Pro">OpenSUSE 13.1 64位 Pro</option>
+                            <option value="OpenSUSE 13.1 32位 Pro">OpenSUSE 13.1 32位 Pro</option>
+                          </optgroup>
+                          <optgroup label="Window Server">
+                            <option value="2008 R2 数据中心">2008 R2 数据中心</option>
+                            <option value="2012 R2 标准版">2012 R2 标准版</option>
+                            <option value="2012 R2 企业版">2012 R2 企业版</option>
+                          </optgroup>
+                        </select>
+                    </div>
+                  </div>
+                    <div class="modal-footer">
+                        <div class="alert alert-success" role="alert" id="updatesuccess"></div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel">取消</button>
+                    <button type="submit" class="btn btn-primary" id="btn-updatehost">更新</button>
+                  </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--添加更新end-->
+
+    <!--删除主机-->
+    <div class="modal fade" id="deletehost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">删除主机</h4>
+          </div>
+          <div class="modal-body">
+            确认要删除该主机吗？
+          </div>
+          <div class="modal-footer">
+              <div class="alert alert-success" role="alert" id="delhostok"></div>
+            <button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+            <button type="button" class="btn btn-primary" id="btn-deletehost">删除</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--删除end-->
+
+
+{% endblock %}
+{% block js %}
+$(document).ready(function() {
+    // 添加主机
+    $('#addmem').slider({
+    formatter: function(value) {
+        return 'MEM: ' + value;
+    }
+    });
+
+    $('#adddisk').slider({                  // 添加滑条
+        formatter: function(value) {
+            return 'DISK: ' + value;
+        }
+    });
+    jQuery('#addhosterror').hide();
+    jQuery('#addhostsuccess').hide();
+    $('#addnewhost').formValidation({
+        framework: 'bootstrap',
+            icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                hostname: {
+                    validators: {
+                        notEmpty: {
+                        }
+                    }
+                },
+                hostip: {
+                    validators: {
+                        notEmpty: {
+                        },
+                        ip: {
+                        message: "不是正确的ip格式"
+                        }
+                    }
+                },
+                hostlanip: {
+                    validators: {
+                        notEmpty: {
+                        },
+                        ip: {
+                        message: "不是正确的ip格式"
+                        }
+                    }
+                },
+                cpu: {
+                    validators: {
+                        notEmpty: {
+                        },
+                        between:{
+                            min: 2,
+                            max: 50,
+                        }
+                    }
+                }
+            }
+        })          // 校验输入的信息是否正确
+        .on('success.form.fv', function(e) {
+            e.preventDefault();
+           var  hostname = jQuery('#addhostname').val().replace(/(^\s*)|(\s*$)/g, ""),
+                hostip = jQuery('#addhostip').val().replace(/(^\s*)|(\s*$)/g, ""),
+                hostlanip = jQuery('#addhostlanip').val().replace(/(^\s*)|(\s*$)/g, ""),
+                hostmemory = jQuery('#addmem').val().replace(/(^\s*)|(\s*$)/g, ""),
+                hostdisk = jQuery('#adddisk').val().replace(/(^\s*)|(\s*$)/g, ""),
+                hostcpu = jQuery('#addcpu').val().replace(/(^\s*)|(\s*$)/g, ""),
+                hostos = jQuery('#addos').val().replace(/(^\s*)|(\s*$)/g, ""),
+                hoststatus = jQuery('#addstatus').val().replace(/(^\s*)|(\s*$)/g, "");
+        jQuery.post('/addhost/',{
+            'hostname' : hostname,
+            'hostip' : hostip,
+            'hostlanip' : hostlanip,
+            'hostmemory' : hostmemory + 'G',
+            'hostdisk' : hostdisk + 'G',
+            'hostcpu' : hostcpu + '核',
+            'hostos' : hostos,
+            'hoststatus' : hoststatus
+        },function(data){
+            if(data['ok']) {
+                jQuery('#addhostsuccess').text(data['result']);
+                jQuery('#addhostsuccess').show();
+                //jQuery('#addhost').modal('hide');
+                setTimeout(function(){
+                    window.location.reload(1);
+                    },500);
+            } else {
+                jQuery('#addhosterror').text(data['result']);
+                jQuery('#addhosterror').show();
+            }
+        }, 'json');
+        });
+    // 添加主机end
+
+// 更新主机信息
+    jQuery('#updatehost').on('show.bs.modal', function (event) {
+      var button = jQuery(event.relatedTarget);             //使用event.relatedTarget以及HTML的data-* 属性根据点击的是哪个按钮，多样化模态框的内容
+      var hostname = button.data('hostname');               //获取username的值根据html上面的data-username={user['username']}
+      var modal = jQuery(this);
+      jQuery('#updateerror').hide();
+      jQuery('#updatesuccess').hide();
+      modal.find('.modal-title').text('更新' + hostname + '信息');
+      modal.find('#hostid').val(button.data('hostid'));
+      modal.find('#oldhostname').val(button.data('hostname'));
+      modal.find('#oldip').val(button.data('hostip'));
+      modal.find('#oldlanip').val(button.data('hostlanip'));
+      modal.find('#oldmemory').val(button.data('hostmemory'));
+      modal.find('#olddisk').val(button.data('hostdisk'));
+      modal.find('#oldcpu').val(button.data('hostcpu'));
+      modal.find('#oldos').val(button.data('hostos'));
+    });
+    $('#updatehostinfo').formValidation({
+        framework: 'bootstrap',
+            icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                oldhostname: {
+                    validators: {
+                        notEmpty: {
+                        }
+                    }
+                },
+                oldip: {
+                    validators: {
+                        notEmpty: {
+                        },
+                        ip: {
+                        message: "不是正确的ip格式"
+                        }
+                    }
+                },
+                oldlanip: {
+                    validators: {
+                        notEmpty: {
+                        },
+                        ip: {
+                        message: "不是正确的ip格式"
+                        }
+                    }
+                },
+                oldcpu: {
+                    validators: {
+                        notEmpty: {
+                        },
+                        between:{
+                            min: 2,
+                            max: 50,
+                        }
+                    }
+                }
+            }
+        })          // 校验输入的信息是否正确
+        .on('success.form.fv', function(e) {
+            e.preventDefault();
+            //jQuery('#btn-updatehost').on('click', function() {
+               var  hostid = jQuery('#hostid').val(),
+                    hostname = jQuery('#oldhostname').val().replace(/(^\s*)|(\s*$)/g, ""),
+                    hostip = jQuery('#oldip').val().replace(/(^\s*)|(\s*$)/g, ""),
+                    hostlanip = jQuery('#oldlanip').val().replace(/(^\s*)|(\s*$)/g, ""),
+                    hostmemory = jQuery('#oldmemory').val().replace(/(^\s*)|(\s*$)/g, ""),
+                    hostdisk = jQuery('#olddisk').val().replace(/(^\s*)|(\s*$)/g, ""),
+                    hostcpu = jQuery('#oldcpu').val().replace(/(^\s*)|(\s*$)/g, ""),
+                    hostos = jQuery('#oldos').val();
+                    jQuery.post('/updatehost/', {
+                        'hostid' : hostid,
+                        'hostname' : hostname,
+                        'hostip' : hostip,
+                        'hostlanip' : hostlanip,
+                        'hostmemory' : hostmemory,
+                        'hostdisk' : hostdisk,
+                        'hostcpu' : hostcpu,
+                        'hostos' : hostos
+                    }, function(data){
+                        if(data['ok']) {
+                            jQuery('#updatesuccess').text(data['result']);
+                            jQuery('#updatesuccess').show();
+                            setTimeout(function(){
+                                window.location.reload();
+                                },500)
+                        } else {
+                            jQuery('#updateerror').text(data['result']);
+                            jQuery('#updateerror').show();
+                        }
+                    }, 'json');
+
+                jQuery('#btn-cancel').click(function() {            //点击取消按钮触发一个事件 reset form
+                      jQuery('#updatehostinfo').data('formValidation').resetForm(true);
+                });
+                //$('#updatehost').on('hidden.bs.modal', function (event) {
+                    //jQuery('#updatehostinfo').data('formValidation').resetForm(true);
+                  //  $('#updatehostinfo').data('formValidation').resetForm();
+                    //console.log('resetform');
+                //});
+            });
+    // 更新主机end
+
+    //删除主机
+    jQuery('#deletehost').on('show.bs.modal', function (event) {
+     jQuery('#delhostsuccess').hide();
+      var button = jQuery(event.relatedTarget);
+      var hostname = button.data('delhostname');
+      var hostid = button.data('delhostid');
+      var modal = jQuery(this);
+      modal.find('.modal-title').text('删除主机 ' + hostname + '信息');
+            jQuery('#btn-deletehost').on('click', function() {
+                jQuery.post('/deletehost/', {
+                    'hostid' : hostid,
+                    'hostname' : hostname
+                }, function(data){
+                    if(data['ok']) {
+                        jQuery('#delhostok').text(data['result']);
+                        jQuery('#delhostok').show();
+                        setTimeout(function(){
+                        window.location.reload(1);
+                        },500);
+                    }
+                }, 'json');
+                  });
+        });
+    // end delete host
+
+
+});
+{% endblock %}
+
+
