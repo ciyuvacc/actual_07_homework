@@ -164,3 +164,12 @@ def deleteUser():
     _id = request.args.get('id', '')
     models.delete_user(_id)
     return redirect('/users/')
+
+@app.route('/logout/')
+def logout():
+    session.clear()
+
+@app.route('/assets/')
+def asset():
+	return render_template('asset.html')
+
