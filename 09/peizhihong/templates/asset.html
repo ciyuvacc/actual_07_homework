@@ -1,0 +1,358 @@
+{% extends 'layout.html' %}
+{% block title %}资产列表页面{% endblock %}
+{% block link %}
+<link href="{{url_for('static', filename='bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='bootstrap-slider/css/bootstrap-slider.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block style %}
+table th, table td {
+  text-align:center;
+}
+{% endblock %}
+{% block topassetactive %}class="active"{% endblock %}
+{% block leftassetactive %}class="active"{% endblock %}
+{% block container %}
+<div class="row">
+  <div class="col-md-1">
+    <button type="button" class="btn btn-info btn-default" data-toggle="modal" data-target="#create-dialog">添加</button>
+  </div>
+
+  <div class="col-md-11">
+    <form action='/asset/' method='post' class="form-inline">
+      <div class="form-group">
+        <input type="text" name="query" class="form-control" value="{{query}}" placeholder="根据IP查询" />
+        <button type="submit" class="btn btn-default">查询</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<br />
+
+<table class="table table-striped table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>SN</th>
+      <th>IP(主机名)</th>
+      <th>机房</th>
+      <th>业务(使用者)</th>
+      <th>配置(cpu,ram,disk)</th>
+      <th>操作系统</th>
+      <th>型号</th>
+      <th>采购时间</th>
+      <th>厂商</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for asset in assets%}
+    <tr>
+      <td>{{asset['sn']}}</td>
+      <td>{{asset['ip']}}, {{asset['hostname']}}</td>
+      <td>{{asset['machine_room_id']}}</td>
+      <td>{{asset['business']}}, {{asset['admin']}}</td>
+      <td>{{asset['cpu']}}, {{asset['ram']}}, {{asset['disk']}}</td>
+      <td>{{asset['os']}}</td>
+      <td>{{asset['model']}}</td>
+      <td>{{asset['purchase_date']}}</td>
+      <td>{{asset['vendor']}}</td>
+      <td>
+          <a data-toggle="modal" data-target="#updateDialog" data-sn="{{asset['sn']}}" data-cpu="{{asset['cpu']}}" data-ram="{{asset['ram']}}" data-disk="{{asset['disk']}}" data-id="{{asset['id']}}">更新</a>
+          <a href="#" data-href="/deleteAsset/?id={{asset['id']}}" data-toggle="modal" data-target="#confirm-delete">删除</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!--添加资产-->
+<div class="modal fade" id="create-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">添加资产</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <input type="hidden" id="id" name="id"/>
+          <div class="form-group">
+            <label for="sn" class="col-sm-2 control-label">编号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="sn">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="ip" class="col-sm-2 control-label">IP地址</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="ip">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="hostname" class="col-sm-2 control-label">主机名</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="hostname">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="machine_room" class="col-sm-2 control-label">机房</label>
+            <div class="col-sm-10">
+              <select id="machine_room" class="form-control">
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="business" class="col-sm-2 control-label">业务</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="business">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="admin" class="col-sm-2 control-label">使用者</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="admin">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cpu" class="col-sm-2 control-label">CPU</label>
+            <div class="col-sm-10">
+              <!--<input type="text" class="form-control" id="cpu">-->
+              <input id="cpu" class="form-control" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="80" data-slider-step="1" data-slider-value="14" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="ram" class="col-sm-2 control-label">内存</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="ram">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="disk" class="col-sm-2 control-label">硬盘</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="disk">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="os" class="col-sm-2 control-label">操作系统</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="os">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="model" class="col-sm-2 control-label">型号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="model">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="purchase_date" class="col-sm-2 control-label">采购时间</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="purchase_date">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="vendor" class="col-sm-2 control-label">厂商</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="vendor">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" id="btn-create">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--更新资产-->
+<div class="modal fade" id="updateDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">更新资产</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+        <div class="alert alert-danger" role="alert" id="error"></div>
+          <input type="hidden" id="id" name="id"/>
+          <div class="form-group">
+            <label for="cpu" class="col-sm-2 control-label">CPU</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="cpu" name='cpu'>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="ram" class="col-sm-2 control-label">内存</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="ram" name='ram'>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="disk" class="col-sm-2 control-label">硬盘</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="disk" name='disk'>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" id="btn-update">更新</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--删除资产-->
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                请确认
+            </div>
+            <div class="modal-body">
+                确认删除该记录吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <a class="btn btn-danger btn-ok">删除</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+<script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js')}}"></script>
+<script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js')}}"></script>
+<script src="{{url_for('static', filename='bootstrap-slider/js/bootstrap-slider.min.js')}}"></script>
+{% endblock %}
+{% block js%}
+$(document).ready(function() {
+    $('#create-dialog').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        jQuery("#machine_room").empty();
+        jQuery.get('/machine_room/', function(res) {
+            //{'id':'name'}
+            for(var id in res) {
+                jQuery("#machine_room").append("<option value='" + id + "'>" + res[id] + "</option>");
+            }
+        }, 'json');
+    });
+
+
+    jQuery('#purchase_date').datetimepicker({
+      language: 'zh-CN',
+      format: 'yyyy-mm-dd',
+      minView: 2
+    });
+
+    $('#cpu').slider({
+      formatter: function(value) {
+        return 'CPU: ' + value;
+      }
+    });
+
+    jQuery('#btn-create').bind('click', function() {
+      var sn = jQuery('#sn').val(),
+          vendor = jQuery('#vendor').val(),
+          machine_room = jQuery('#machine_room').val(),
+          model = jQuery('#model').val(),
+          purchase_date = jQuery('#purchase_date').val(),
+          cpu = jQuery('#cpu').val(),
+          ram = jQuery('#ram').val(),
+          disk = jQuery('#disk').val(),
+          os = jQuery('#os').val(),
+          ip = jQuery('#ip').val(),
+          hostname = jQuery('#hostname').val(),
+          admin = jQuery('#admin').val(),
+          business = jQuery('#business').val();
+          jQuery.post('/addAsset/',{
+            'sn':sn,
+            'vendor': vendor,
+            'machine_room': machine_room,
+            'model': model,
+            'purchase_date': purchase_date,
+            'cpu': cpu,
+            'ram': ram,
+            'disk': disk,
+            'os': os,
+            'ip': ip,
+            'hostname': hostname,
+            'admin': admin,
+            'business': business
+          }, function(res) {
+              console.log(res);
+              if(res['ok']) {
+                $('#create-dialog').modal('hide');
+                window.location.reload();
+              } else {
+                  jQuery('#error').text(data['result']);
+                  jQuery('#error').show();
+              }
+            }, 'json')
+    });
+
+jQuery('#updateDialog').on('show.bs.modal', function (event) {
+      var button = jQuery(event.relatedTarget); // Button that triggered the modal
+      var sn = button.data('sn'); // Extract info from data-* attributes
+      var modal = jQuery(this);
+      jQuery('#error').hide();
+      modal.find('.modal-title').text('更新资产 ' + sn + ' 的信息');
+      modal.find('#id').val(button.data('id'));
+      modal.find('#cpu').val(button.data('cpu'));
+      modal.find('#ram').val(button.data('ram'));
+      modal.find('#disk').val(button.data('disk'));
+      console.log(id,cpu,ram,disk);
+    });
+    
+    jQuery('#btn-update').on('click', function() {
+        var id = $('#id').val(),
+            cpu = $('#cpu').val(),
+            ram = $('#ram').val(),
+            disk = $('#disk').val();
+            console.log(id);
+            jQuery.post('/updateAsset/', {
+                'id' : id,
+                'cpu' : cpu,
+                'ram': ram,
+                'disk' : disk
+            }, function(data){
+                console.log(data);
+                if(data['ok']) {
+                    jQuery('#updateDialog').modal('hide');
+                    window.location.reload(); 
+                } else {
+                    jQuery('#error').text(data['result']);
+                    jQuery('#error').show();
+                }
+            }, 'json');
+    });
+
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+      $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+});
+{% endblock %}

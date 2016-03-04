@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>用户创建页面</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap-3.3.5-dist/css/bootstrap.min.css')}}">
+        <style type="text/css">
+            .error{
+                color:red;
+            }
+
+            .success{
+            color:green;
+            }
+
+            body{
+                padding-top: 40px;
+                padding-bottom: 40px;
+                background-color: #eee;
+            }
+
+            .form-register{
+                max-width: 330px;
+                padding: 15px;
+                margin: 0 auto;
+            }
+
+            .btn-right{
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <form id="register" class="form-register" action="/addUser/" method="post">
+                <h2 class="form-signin-heading">用户创建</h2>
+                {% if result %}
+                    <div class="
+                   {% if result %}
+                   error
+                   {% endif %}
+                   ">{{result}}</div>
+                {% endif %}
+                <div class="form-group">
+                    <input type="text" class="form-control" name="username" value="{{username}}" placeholder="账号" /><br />
+                    <input type="password" class="form-control" name="password" value="{{password}}" placeholder="密码" /><br />
+                    <input type="text" class="form-control" name="telephone" value="{{telephone}}" placeholder="手机" /><br />
+                    <input type="text" class="form-control" name="age" value="{{age}}" placeholder="年龄" /><br />
+                </div>
+                <div class="form-group btn-right">
+                    <button class="btn btn-default btn-primary btn-right" type="submit" text-align:>提交</button>
+                    <a href='/listUser/' class="btn btn-default btn-primary btn-right" role="button">返回</a>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
