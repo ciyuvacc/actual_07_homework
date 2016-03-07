@@ -49,13 +49,12 @@ def login():
     params = request.args if request.method == 'GET' else request.form
     
     # 获取username和password信息
-    username = params.get('username', '')
-    password = params.get('password', '')
+    user = models.User(params)
     
     # 验证用户名和密码
-    if models.validate_user_login(username, password):
+    if user.login():
         # 成功则显示所有用户的信息列表
-        session['user'] = {'username' : username}
+        session['user'] = {'username' : user.username}
         return redirect('/users/')
     else:
         # 失败则提示用户失败, 依然返回登陆页面
@@ -93,10 +92,33 @@ def register():
 def users():
     params = request.args if request.method == 'GET' else request.form
     _query = params.get('query', '')
+    _total = models.User.fetch_count(_query)
+    _page_size = params.get('pageSize', gconf.PAGE_SIZE)
+    _page_num = params.get('pageNum', 1)
+
+    _page_size = int(_page_size) if str(_page_size).isdigit() \
+                else gconf.PAGE_SIZE
+    _page_size = gconf.PAGE_SIZE if _page_size <= 5 or _page_size >= 100 \
+                else _page_size
+    _max_page_num = int(math.ceil(_total * 1.0 / _page_size))
+
+    _page_num = int(_page_num) if str(_page_num).isdigit() else 1
+    _page_num = 1 if _page_num < 1 or _page_num > _max_page_num else _page_num
+    
+    _offset = (_page_num - 1) * _page_size
+
+    _start_page_num = _page_num - 2
+    _start_page_num = 1 if _start_page_num < 1 else _start_page_num
+    _end_page_num = _start_page_num + 5
+    _end_page_num = _end_page_num if _end_page_num <= _max_page_num else _max_page_num 
     # 获取所有用户
-    _users = models.get_users(_query)
+    _users = models.User.fetch_all(_query, _offset, _page_size)
     # 返回用户列表页面
-    return render_template('users.html', users=_users, query=_query)
+    return render_template('users.html', \
+                users=_users, query=_query, \
+                startPageNum=_start_page_num, endPageNum=_end_page_num,\
+                pageNum=_page_num, pageSize=_page_size,\
+                maxPageNum=_max_page_num)
 
 # 添加用户信息(打开页面)
 @app.route('/createUser/')
@@ -108,18 +130,14 @@ def createUser():
 @app.route('/addUser/', methods=['POST', 'GET'])
 @login_required
 def addUser():
-    # 从request.form中获取username、password、telephone信息
-    username = request.form.get('username', '')
-    password = request.form.get('password', '')
-    telephone = request.form.get('telephone', '')
-    age = request.form.get('age', '')
+    user = models.User(request.form)
 
     # 检查用户提交的数据
-    ok, result = models.validate_user_add(username, password, telephone, age)
+    ok, result = user.validate_add()
     
     # 如果检查通过则添加到文件中
     if ok:
-        if models.add_user(username, password, telephone, age):
+        if user.create():
             ok = True
             result = '注册成功'
         else:
@@ -132,35 +150,23 @@ def addUser():
         #return render_template('create.html',  result=result, register_username=username, password=password, telephone=telephone, age=age)
         return json.dumps({'ok' : False, 'result' : result})
 
-# 更新用户信息(打开页面)
-@app.route('/modifyUser/')
-@login_required
-def modifyUser():
-    _id = request.args.get('id', '')
-    _user = models.get_user_by_id(_id)
-    if _user is None:
-        return render_template('update.html', result='用户信息不存在')
-    else:
-        return render_template('update.html', id=_user['id'], username=_user['username'], telephone=_user['telephone'], age=_user['age'])
-
 # 更新用户信息(更新DB)
 @app.route('/updateUser/', methods=['POST'])
 @login_required
 def updateUser():
     _id = request.form.get('id', '')
-    _user = models.get_user_by_id(_id)
-    if _user is None:
+    _ouser = models.User.get_by_key(_id)
+    if _ouser is None:
         return render_template('update.html', result='用户信息不存在')
     else:
-        telephone = request.form.get('telephone', '')
-        age = request.form.get('age', '')
+        _nuser = models.User(request.form)
 
         # 检查用户提交的数据
-        ok, result = models.validate_user_modify(telephone, age)
+        ok, result = _nuser.validate_modify()
         
         # 如果检查通过则添加到DB
         if ok:
-            if models.modify_user(_user['id'], telephone, age):
+            if _nuser.update():
                 ok = True
                 result = '更新成功'
             else:
@@ -179,7 +185,7 @@ def updateUser():
 @login_required
 def deleteUser():
     _id = request.args.get('id', '')
-    models.delete_user(_id)
+    models.User.delete(_id)
     #return redirect('/users/')
     return json.dumps({'ok' : True})
 

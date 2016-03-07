@@ -48,8 +48,55 @@
             </tr>
             {% endfor %}
         </tbody>
-
     </table>
+    <div class="row">
+        <div class="col-md-8">
+            <div>当前是{{pageNum}}, 共有{{maxPageNum}}页</div>
+        </div>
+        <div class="col-md-4">
+            <nav class="nav-btn-right">
+              <ul class="pagination">
+                <li
+                {% if pageNum == 1 %}
+                class="disabled"
+                {% endif %}
+                >
+                    <a 
+                    {% if pageNum == 1 %}
+                        href="javascript:void(0);"
+                    {% else %}
+                        href="/users/?query={{query}}&pageNum={{pageNum - 1}}&pageSize={{pageSize}}"
+                    {% endif %}
+                    aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                {% for page in range(startPageNum, endPageNum + 1) %}
+                <li
+                {% if page == pageNum %}
+                class="active"
+                {% endif %}
+                ><a href="/users/?query={{query}}&pageNum={{page}}&pageSize={{pageSize}}">{{page}}</a></li>
+                {% endfor %}
+                <li
+                {% if maxPageNum == pageNum %}
+                class="disabled"
+                {% endif %}
+                >
+                  <a 
+                  {% if maxPageNum == pageNum %}
+                    href="javascript:void(0);"
+                  {% else %}
+                    href="/users/?query={{query}}&pageNum={{pageNum + 1}}&pageSize={{pageSize}}" 
+                  {%endif %}
+                  aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+        </div>
+    </div>
 </div>
 <div class="modal fade" id="create-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">

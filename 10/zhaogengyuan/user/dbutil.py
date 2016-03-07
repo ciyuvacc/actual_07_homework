@@ -46,29 +46,29 @@ def execute_sql(sql, args=(), is_fetch=False):
 
 if __name__ == '__main__':
     # 用户添加
-    print execute_sql('INSERT INTO user(username, password) VALUES(%s, md5(%s));', ('kk', '123456'))
+    #print execute_sql('INSERT INTO user(username, password) VALUES(%s, md5(%s));', ('kk', '123456'))
     # 验证用户登录
-    print execute_sql('SELECT * FROM user WHERE username=%s AND password=md5(%s);', ('kk', '123456'), True)
+    #print execute_sql('SELECT * FROM user WHERE username=%s AND password=md5(%s);', ('kk', '123456'), True)
     # 更改用户密码
-    print execute_sql('UPDATE user SET password=md5(%s) WHERE username=%s;', ('123456789', 'kk'))
+    #print execute_sql('UPDATE user SET password=md5(%s) WHERE username=%s;', ('123456789', 'kk'))
     # 验证用户登录
-    print execute_sql('SELECT * FROM user WHERE username=%s AND password=md5(%s);', ('kk', '123456'), True)
+    #print execute_sql('SELECT * FROM user WHERE username=%s AND password=md5(%s);', ('kk', '123456'), True)
     # 删除用户
-    print execute_sql('DELETE FROM user where username=%s', ('kk',))
+    #print execute_sql('DELETE FROM user where username=%s', ('kk',))
     
     # 添加10个用户
-    for i in range(10):
+    for i in range(100, 200):
         execute_sql('INSERT INTO user(username, password) VALUES(%s, md5(%s));', ('kk_%s' % i, '123456'))
     
     # 查询所有用户
-    _cnt, _rt = execute_sql('SELECT * FROM user', (), True)
-    print _cnt
+    #_cnt, _rt = execute_sql('SELECT * FROM user', (), True)
+    #print _cnt
     # 遍历所有用户
-    for _rs in _rt:
-        print _rs
+    #for _rs in _rt:
+    #    print _rs
 
     # 删除所有用户
-    print execute_sql('DELETE FROM user')
+    #print execute_sql('DELETE FROM user')
 
     # 获取用户数量
     print execute_sql(sql='SELECT count(*) FROM user', is_fetch=True)
