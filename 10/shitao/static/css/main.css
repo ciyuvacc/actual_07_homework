@@ -1,0 +1,475 @@
+body{
+    margin:0;
+    font-family:Arial;
+    width: 100%;
+    min-width: 1100px;
+    overflow: auto;
+}
+
+.div-all{
+    height: 1145px;
+}
+
+.form-host-header {
+    background-color:#087;
+    height:45px;
+    margin:0;
+}
+
+.form-host-header h1 {
+    margin:0;
+    font-weight: bolder;
+    float: left;
+    width: 80%;
+    color: aliceblue;
+    height: 100%;
+}
+
+.btn-dropdown {
+    margin-left: 0px;
+    float: right;
+    width: 60%;
+    height: 45px;
+    background-color: #087;
+    color: aliceblue;
+}
+
+.btn-dropdown1 {
+    margin-left: 0px;
+    float: right;
+    /*width: 70%;*/
+    height: 45px;
+    background-color: #087;
+    color: aliceblue;
+}
+
+.btn-dropdown:hover {
+    text-decoration:none;
+    background-color: #087;
+    color: aliceblue;
+}
+
+.btn-dropdown1:hover {
+    text-decoration:none;
+    background-color: #087;
+}
+
+.div-dropdown {
+    float: right;
+    width: 10%;
+    color: aliceblue;
+}
+
+.div-dropdown1{
+    width: 10%;
+}
+
+.open > .ul-dropdown {
+    text-align: center;
+}
+
+.form-dropdown {
+    color: aliceblue;
+    font-size: 20px;
+    display: -moz-groupbox;
+}
+
+.ul-dropdown > li > a {
+    display: -moz-groupbox;
+    color: aliceblue;
+}
+
+.form-dropdown:hover {
+    text-decoration:none;
+    background-color: #087;
+}
+
+.ul-dropdown {
+    margin: 0px;
+    color: aliceblue;
+    background-color: #087;
+    min-width: 120px;
+    width: 130px;
+}
+
+.form-img-user {
+    vertical-align: middle;
+    width: 40px;
+    height: 35px;
+    margin: -1px;
+}
+
+.div-panel {
+    float:left;
+    width:12%;
+    margin: 0;
+}
+
+.div-panel1 {
+    height: 100%;
+}
+
+.form-host-menu {
+    background-color:#FFFFFF;
+    height:1100px;
+    width:12%;
+    float:left;
+    margin-bottom:0;
+}
+
+.panel-h4{
+    font-size: 20px;
+}
+
+.form-host-content {
+    background-color:#FFFFFF;
+    color: red;
+    height:1100px;
+    width:88%;
+    float:left;
+    margin-bottom:0;
+    text-align: center;
+    line-height: 30;
+}
+
+.form-host-content2 {
+    width:88%;
+    float:left;
+    height:1100px;
+    margin-bottom:0;
+    text-align: center;
+    border-collapse: collapse;
+    font-family:Arial;
+    #font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+.table-custom{
+    border:1px solid black;
+    width:100%;
+    height:40px;
+}
+
+.table-custom th,.table-custom tr,.table-custom td{
+    height:40px;
+    border:1px solid #DDD;
+    text-align: center;
+    line-height: 10px;
+}
+
+.table-special{
+    width: 99%;
+    margin: auto;
+}
+
+.form-th-select{
+    width:30px;
+}
+
+.btn-custom{
+    /*width:60px;*/
+    background-color:#087;
+    border-color:#087;
+}
+
+.modal-property{
+    padding-top: 15px;
+}
+
+.h4-title{
+    font-weight: bold;
+    color: #087;
+}
+
+#selectServer {
+    width: 500px;
+    margin-left: 30px;
+}
+
+#selectoptype{
+    text-align: center;
+    width: 130px;
+    margin-left: 220px;
+    margin-bottom: 10px;
+    padding: 0px;
+}
+
+#opclassify{
+    margin-left: 220px;
+    width: 130px;
+}
+
+#operation{
+    margin-left: 220px;
+    width: 130px;
+}
+
+.selectopclassify{
+    text-align: center;
+}
+
+.selectoperation{
+    text-align: center;
+}
+
+
+.selectupdate{
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.cusdiv-modal{
+    padding-top: 200px;
+}
+
+.h4-cusmodal{
+    color: red;
+    text-align: center;
+}
+
+.form-input{
+    color: #FFF;
+    background-color: #428BCA;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    width: 50px;
+    height: 30px;
+}
+
+#updateapp{
+    float: left;
+    width: 100px;
+}
+
+#updatedb{
+    float: left;
+    width: 100px;
+}
+
+#svnrevision{
+    width: 130px;
+    text-align: center;
+    margin-left: 220px;
+}
+
+#upload{
+    /*margin: auto;*/
+    width: 150px;
+    margin-top: 5px;
+    margin-left: 220px;
+}
+
+.userop_his{
+    width: 88%;
+    float: left;
+}
+
+.p_his{
+    color: red;
+    height: 30px;
+    font-weight: bold;
+    width: 86%;
+    padding-top: 8px;
+    text-align: center;
+    margin: 15px;
+}
+
+.div-userop{
+    width: 100%;
+}
+
+#selectuser{
+    text-align: center;
+    width: 106px;
+    height: 30px;
+    padding: 0px;
+}
+.chaxunlist{
+    float: left;
+    margin-left: 11%;
+    width:14%;
+    padding-top: 8px;
+}
+
+.div-starttime{
+    float: left;
+    width: 27%;
+    padding-top: 8px;
+}
+
+.datetime-starttime{
+    width: 100px;
+    margin: 4px;
+}
+
+.input-starttime{
+    width: 207px;
+    text-align: center;
+    height: 30px;
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+}
+
+.div-stoptime{
+    float: left;
+    width: 27%;
+    padding-top: 8px;
+}
+
+.datetime-stoptime{
+    width: 100px;
+    margin: 4px;
+}
+
+.input-stoptime{
+    width: 207px;
+    text-align: center;
+    height: 30px;
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+}
+
+.tb-userop{
+    width:100%;
+}
+
+.ul-pagination{
+    margin-top: 0px;
+    margin-right: 10px;
+}
+
+.page-a{
+    /*margin-left: 10px;*/
+    /*font-size: 20px;*/
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url('../images/glyphicons-halflings.png');
+    background-position: 14px 14px;
+    background-repeat: no-repeat;
+}
+
+.icon-arrow-left{
+    background-position:-240px -96px;
+}
+
+.icon-arrow-right{
+    background-position:-264px -96px;
+}
+
+.icon-arrow-up{
+    background-position:-289px -96px;
+}
+
+.icon-arrow-down{
+    background-position:-312px -96px;
+}
+
+.changeserver{
+    float: left;
+    width: 88%;
+}
+
+.div-selectchangetype{
+    width: 100%;
+}
+
+#selectchangetype{
+    margin-left: 40%;
+    height: 30px;
+    text-align: center;
+    width: 130px;
+    padding: 0px;
+}
+
+.p_changetype{
+    color: red;
+    height: 30px;
+    font-weight: bold;
+    width: 86%;
+    padding-top: 8px;
+    text-align: center;
+    margin: 15px;
+}
+
+#addserver {
+    width: 100%;
+}
+
+.form-changeserver{
+    width: 100%;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 1000px;
+    margin-top: 10px;
+}
+
+.label-server{
+    margin-left: auto;
+    margin-right: auto;
+    width: 250px;
+}
+
+.div-col{
+    width: 300px;
+}
+
+.input-server{
+    text-align: center;
+}
+
+.button-changeserver{
+    width: 780px;
+    margin-left: 220px !important;
+}
+
+.envinit{
+    float: left;
+    width: 88%;
+}
+
+#newserverinfo {
+    width: 100%;
+}
+
+.form-newserverinfo{
+    width: 100%;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 1000px;
+    margin-top: 10px;
+}
+
+.button-newserverinfo{
+    width: 780px;
+    margin-left: 220px !important;
+}
+
+#porg-envinit{
+    width: 40%;
+    margin-left: 25%;
+}
+
+.input-envinit{
+    width:50%;
+}
+
+.a-custom{
+    color: #333;
+}
+
+.serverdetailinfo:hover{
+    text-decoration: underline;
+    color: #428BCA;
+}
+
+.cusdiv-modal2{
+    padding-top: 15px;
+}
