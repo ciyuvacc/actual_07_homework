@@ -88,10 +88,9 @@ class DBModel(object):
 
 
     def create(self):
-        _sql = self._sql_insert.format(table=self._table, columns=','.join(self._columns), values=','.join(['%s'] * len(self._columns)))
-        _params = []
-        for _column in self._columns:
-            _params.append(getattr(self, _column, ''))
+        _sql = self._sql_insert.format(table=self._table, columns=','.join(self._columns_add), values=','.join(['%s'] * len(self._columns_add)))
+        _params = [getattr(self, _column, '') for _column in self._columns_add]
+        print _sql, _params
         _cnt, _ = self.execute(_sql, _params)
         logger.info('create:%s, %s, %s', _sql, _params, _cnt)
         return _cnt > 0

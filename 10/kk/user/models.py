@@ -89,7 +89,8 @@ class Asset(DBModel):
     _table = 'asset'
     _pk = 'id'
     _columns = 'id,sn,vendor,machine_room_id,model,purchase_date,cpu,ram,disk,os,ip,hostname,admin,bussiness,status'.split(',')
-    _add_columns = 'sn,vendor,machine_room_id,model,purchase_date,cpu,ram,disk,os,ip,hostname,admin,bussiness'.split(',')
+    _columns_add = 'sn,vendor,machine_room_id,model,purchase_date,cpu,ram,disk,os,ip,hostname,admin,bussiness'.split(',')
+    _defaults = {'status' : 0}
 
     @classmethod
     def query_count(cls, query=''):
@@ -115,10 +116,10 @@ class Asset(DBModel):
     def validate_add(self):
         errors = {}
         result = ''
-        for key, value in self.__dict__.items():
-            if value.strip() == '':
+        for _column in self._columns_add:
+            if str(getattr(self, _column, '')).strip() == '':
                 result = '验证失败'
-                errors[key] = '不能为空'
+                errors[_column] = '不能为空'
 
         return len(errors) == 0, result, errors
 

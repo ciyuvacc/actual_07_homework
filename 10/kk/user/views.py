@@ -203,10 +203,10 @@ def addAsset():
     _asset = models.Asset.create_by_request(request)
     
     # 检查用户提交的数据
-    ok, result, errors = _asset.validate_add(_asset)
+    ok, result, errors = _asset.validate_add()
 
     if ok:
-        if _asset.add():
+        if _asset.create():
             ok = True
             result = '添加成功'
         else:
