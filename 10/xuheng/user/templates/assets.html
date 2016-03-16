@@ -57,6 +57,7 @@
                     <a class="btn-link" data-toggle="modal" data-target="#detail-dialog"  data-id="{{asset['id']}}" data-ip="{{asset['ip']}}" data-backdrop="false">查看</a>
                     <a class="btn-link" data-toggle="modal" data-target="#update-dialog"  data-id="{{asset['id']}}" data-backdrop="false">更新</a>
                     <a class="btn-link" data-toggle="modal" data-target="#delete-dialog" data-id="{{asset['id']}}" data-backdrop="false">删除</a>
+                    <a class="btn-link" data-toggle="modal" data-target="#cmd-dialog"  data-id="{{asset['id']}}" data-ip="{{asset['ip']}}" data-backdrop="false">执行</a>
                 </td>
             </tr>
         {% else %}
@@ -218,6 +219,50 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="cmd-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">执行命令</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="alert alert-danger" role="alert" id="cmd-error"></div>
+                    <input type="hidden" id="cmd-id" name="id"/>
+                    <div class="form-group">
+                        <label for="cmd-ipadd" class="col-sm-2 control-label">IP地址</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="cmd-ipadd" name='ipadd'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cmd-user" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="cmd-user" name='user'>
+                        </div>
+                    </div>
+                                        <div class="form-group">
+                        <label for="cmd-passwd" class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="cmd-passwd" name='passwd'>
+                        </div>
+                    </div>
+                                        <div class="form-group">
+                        <label for="cmd-line" class="col-sm-2 control-label">命令</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="cmd-line" name='line'>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="cmd-btn">执行</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block script %}
 <script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js')}}"></script>
@@ -239,6 +284,39 @@ jQuery(document).ready(function() {
       }
     }, 'json');
   });
+      jQuery('#cmd-dialog').on('show.bs.modal', function (event) {
+        var button = jQuery(event.relatedTarget);
+        var modal = jQuery(this);
+        jQuery('#cmd-error').hide();
+        modal.find('.modal-title').text('服务器: ' + button.data('ip') + '远程命令');
+        modal.find('#cmd-ipadd').val(button.data('ip'));
+    });
+    jQuery('#cmd-btn').on('click', function() {
+        var ip = jQuery('#cmd-ipadd').val(),
+            user = jQuery('#cmd-user').val(),
+            passwd = jQuery('#cmd-passwd').val(),
+            cline = jQuery('#cmd-line').val();
+        jQuery.post('/remotercmd/', {
+            'ip' : ip,
+            'user' : user,
+            'passwd' : passwd,
+            'cline': cline
+        }, function(data){
+            if(data['ok']) {
+                jQuery('#cmd-dialog').modal('hide');
+                swal({
+                    'title' : '',
+                    'text' : '更新成功',
+                    'type' : 'success',
+                    'timer' : 2000,
+                    'showConfirmButton' : false
+                });
+                window.location.reload();
+            } else {
+                jQuery('#cmd-error').text(data['result']).show();
+            }
+        }, 'json');
+    });
   jQuery('#detail-dialog').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget),
         host_id = button.data('id'),

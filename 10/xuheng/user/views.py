@@ -7,6 +7,7 @@ sys.setdefaultencoding('utf-8')
 import json
 import time
 
+
 # 引入flask中的必要类和函数
 from flask import Flask              #创建Flask APP对象
 from flask import request            #用于获取用户提交的数据
@@ -18,6 +19,7 @@ from flask import session
 import gconf
 import models
 from pagelist import PageList
+from  remotercmd import runcmd
 
 # 创建一个Flask app
 # Flask需要根据传递的参数去寻找templates, static等目录的位置
@@ -231,3 +233,18 @@ def moniter():
 def getmoniters(pk=None):
     _data = models.Moniter.getDATA(pk)
     return json.dumps({'code':200,'data':_data})
+
+
+@app.route('/remotercmd/',methods=['POST'])
+def remotercmd():
+    params = request.args if request.method == 'GET' else request.form
+    ip = params.get('ip','')
+    user = params.get('user','')
+    passwd = params.get('passwd','')
+    cline = params.get('cline','')
+
+    if user == "" and passwd == "" and cline =="":
+        return '信息为空'
+    else:
+        result = runcmd(ip,user,passwd,cline)
+        return json.dumps({'result':result})
