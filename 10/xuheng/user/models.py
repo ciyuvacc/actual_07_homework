@@ -1,6 +1,8 @@
 #encoding: utf-8
 
 from dbbase import DBModel
+import dbutil
+import time
 
 class User(DBModel):
     _table = 'user'
@@ -53,7 +55,7 @@ class User(DBModel):
     @classmethod
     def get_by_username(cls, username):
         _sql = cls.sql_get_by_username % ','.join(cls.columns)
-        _cnt, _users = self.execute(_sql, (username, ), True)
+        _cnt, _users = cls.execute(_sql, (username, ), True)
         return dict(zip(cls.columns, _users[0])) if _cnt > 0 else None
 
     def create(self):
@@ -122,6 +124,38 @@ class Asset(DBModel):
                 errors[_column] = '不能为空'
 
         return len(errors) == 0, result, errors
+
+class Moniter(object):
+    def __init__(self,ip,mtime,cpu,mem):
+        self.ip = ip
+        self.mtime = mtime
+        self.cpu = cpu
+        self.mem = mem
+
+    def save(self):
+        _sql = 'insert into moniter(ip,mtime,cpu,mem) values (%s,%s,%s,%s)'
+        _cnt, _ = dbutil.execute_sql(_sql,(self.ip,self.mtime,self.cpu,self.mem))
+
+        return _cnt > 0
+
+    @classmethod
+    def getDATA(cls,ip):
+
+        _sql = 'select * from moniter where ip = %s and mtime >= %s order by mtime ASC '
+        mtime =time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time() - 60 * 60 ))
+        _cnt,_res = dbutil.execute_sql(_sql,(ip,mtime),True )
+        _times = []
+        _cpu_data = []
+        _mem_data = []
+        for _rs in _res:
+            _cpu,_mem,_time = _rs[2],_rs[3],_rs[4]
+            _times.append(_time.strftime('%H:%M'))
+            _cpu_data.append(_cpu)
+            _mem_data.append(_mem)
+        print {'categories':_times,'series':[{'name':'cpu','data':_cpu_data},{'name':'mem','data':_mem_data}]}
+        return {'categories':_times,'series':[{'name':'cpu','data':_cpu_data},{'name':'mem','data':_mem_data}]}
+
+
 
 
 # 测试的代码

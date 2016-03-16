@@ -54,6 +54,7 @@
                 <td>{{asset['purchase_date']}}</td>
                 <td>{{asset['vendor']}}</td>
                 <td>
+                    <a class="btn-link" data-toggle="modal" data-target="#detail-dialog"  data-id="{{asset['id']}}" data-ip="{{asset['ip']}}" data-backdrop="false">查看</a>
                     <a class="btn-link" data-toggle="modal" data-target="#update-dialog"  data-id="{{asset['id']}}" data-backdrop="false">更新</a>
                     <a class="btn-link" data-toggle="modal" data-target="#delete-dialog" data-id="{{asset['id']}}" data-backdrop="false">删除</a>
                 </td>
@@ -201,11 +202,29 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="detail-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">查看</h4>
+      </div>
+      <div class="modal-body">
+        <div id="host_detail" style="width: 580px; height: 280px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block script %}
 <script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js')}}"></script>
 <script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js')}}"></script>
 <script src="{{url_for('static', filename='bootstrap-slider/js/bootstrap-slider.min.js')}}"></script>
+<script src="{{url_for('static', filename='Highcharts-4.2.3/js/highcharts.js')}}"></script>
+
 {% endblock %}
 {% block js%}
 jQuery(document).ready(function() {
@@ -218,6 +237,49 @@ jQuery(document).ready(function() {
       for(var id in res) {
         jQuery("#machine_room_id").append("<option value='" + id + "'>" + res[id] + "</option>");
       }
+    }, 'json');
+  });
+  jQuery('#detail-dialog').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget),
+        host_id = button.data('id'),
+        host_ip = button.data('ip'),
+        categories = [],
+        series =[];
+    jQuery.get('/moniters/' + host_ip + '/', function(res) {
+      categories = res['data']['categories'];
+      series = res['data']['series'];
+      $('#host_detail').highcharts({
+        title: {
+            text: '主机' + host_ip + '的CPU，内存使用情况',
+            x: -20 //center
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: {
+            categories: categories
+        },
+        yAxis: {
+            title: {
+                text: '使用率'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '%'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: series
+    });
     }, 'json');
   });
   jQuery('#purchase_date').datetimepicker({

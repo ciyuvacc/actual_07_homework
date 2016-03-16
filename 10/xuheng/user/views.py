@@ -5,6 +5,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 import json
+import time
 
 # 引入flask中的必要类和函数
 from flask import Flask              #创建Flask APP对象
@@ -67,11 +68,11 @@ def register():
     age = request.form.get('age', '')
 
     # 检查用户提交的数据
-    ok, result = models.validate_user_add(username, password, telephone, age)
+    ok, result = models.user.validate_user_add(username, password, telephone, age)
     
     # 如果检查通过则添加到文件中
     if ok:
-        if models.add_user(username, password, telephone, age):
+        if models.user.add_user(username, password, telephone, age):
             ok = True
             result = '注册成功'
         else:
@@ -214,3 +215,19 @@ def addAsset():
             result = '添加失败'
 
     return json.dumps({'ok' : ok, 'result' : result, 'errors' : errors})
+
+
+@app.route('/moniters/', methods=['POST'])
+def moniter():
+    mtime = request.form.get('mtime','')
+    cpu = request.form.get('cpu','')
+    mem = request.form.get('mem','')
+    ip = request.form.get('ip','')
+    mtime = time.strftime('%Y-%m-%d %H:%M%S',time.localtime(int(mtime)))
+    rt = models.Moniter(ip,mtime,cpu,mem).save()
+    return json.dumps({'code':rt})
+
+@app.route('/moniters/<pk>/',methods=['GET'])
+def getmoniters(pk=None):
+    _data = models.Moniter.getDATA(pk)
+    return json.dumps({'code':200,'data':_data})
