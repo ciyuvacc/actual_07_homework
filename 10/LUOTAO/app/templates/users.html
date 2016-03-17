@@ -1,0 +1,407 @@
+{% extends 'base.html' %}
+{% block title %}用户管理{% endblock %}
+{% block topfathermem %}<li class="active"><a href="#">CMDB系统 >></a></li>{% endblock %}>
+{% block topsonmem %}<li class="active"><a href="/users">用户管理</a></li>{% endblock %}
+{% block leftuseractive %}class="col-md-offset-2"{% endblock %}
+{% block main %}
+<div class="row">
+    <div class="col-md-1">
+        <button id="adduser-btn" class="btn btn-primary" data-toggle="modal" data-target="#create-dialog" data-backdrop="false">新建</button>
+    </div>
+    <div class="col-md-11">
+        <form action="/users" method="get" class="form-inline">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="请输入用户名" name="query" value="{{query}}">
+                <button class="btn btn-default" type="submit">查询</button>
+            </div>                  
+        </form>                    
+    </div>
+</div>
+<br />
+<div class="row">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>用户名</th>
+                <th>密码</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>地址</th>
+                <th>Email</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for user in data_list['data'] %}
+            <tr>
+                <td>{{user[0]}}</td>
+                <td>{{user[1]}}</td>
+                <td>{{user[2]}}</td>
+                <td>{% if user[3] ==0 %}女 {% else %}男{%endif %}</td>
+                <td>{{user[4]}}</td>
+                <td>{{user[5]}}</td>
+                <td>
+                    <a id='update-id' class="btn-link" data-toggle="modal" data-target="#update-dialog" data-username="{{user[0]}}" data-password="{{user[1]}}" data-sex="{{user[3]}}" data-age="{{user[2]}}"  data-addr="{{user[4]}}"  data-email="{{user[5]}}"  data-backdrop="false">更新</a>
+                    <a id='del-id' class="btn-link" data-toggle="modal" data-target="#delete-dialog" data-username="{{user[0]}}" data-backdrop="false">删除</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="6">暂无数据</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-8">
+            <div>当前是{{data_list["nowpage"]}}, 共有{{data_list["maxpage"]}}页</div>
+        </div>
+        <div class="col-md-4">
+            <nav class="nav-btn-right">
+              <ul class="pagination">
+                <li
+                {% if data_list["nowpage"] == 1 %}
+                class="disabled"
+                {% endif %}
+                >
+                    <a 
+                    {% if data_list["nowpage"] == 1 %}
+                        href="javascript:void(0);"
+                    {% else %}
+                        href="/users?page={{data_list["lastpage"]}}"
+                    {% endif %}
+                    aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                {% for page in range(data_list["startpage"], data_list["endpage"] + 1) %}
+                <li
+                {% if page == data_list["nowpage"] %}
+                class="active"
+                {% endif %}
+                ><a href="/users?page={{page}}">{{page}}</a></li>
+                {% endfor %}
+                <li
+                {% if data_list["maxpage"] == data_list["nowpage"] %}
+                class="disabled"
+                {% endif %}
+                >
+                  <a 
+                  {% if data_list["maxpage"] == data_list["nowpage"] %}
+                    href="javascript:void(0);"
+                  {% else %}
+                    href="/users?page={{data_list["lastpage"]}}" 
+                  {%endif %}
+                  aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+
+
+              </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="create-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">创建用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="alert alert-danger" role="alert" id="create-error"></div>
+                    <div class="form-group">
+                        <label for="create-username" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="create-username" name='username'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-password" class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="create-password" name='password'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-ms-password" class="col-sm-2 control-label">确认密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="create-ms-password" name='ms-password'>
+                        </div>
+                    </div>
+               <div class="form-group"> 
+               <label for="inputEmail3" class="col-sm-2 control-label">Email</label> 
+               <div class="col-sm-5"> 
+                <input type="email" class="form-control" id="create-email" placeholder="Email" name="email"> 
+               </div> 
+             </div> 
+
+                    <div class="form-group">
+                        <label for="create-address" class="col-sm-2 control-label">地址</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="create-address" name='address'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-age" class="col-sm-2 control-label">年龄</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="create-age" name='age'>
+                        </div>
+                    </div>
+               <div class="form-group"> 
+               <label for="inputsex" class="col-sm-2 control-label">性别</label> 
+               <div class="col-sm-5"> 
+                       <label class="radio-inline"> 
+                         <input type="radio" name="userSex" id="userSex" value="0"> 女 
+                       </label> 
+                       <label class="radio-inline"> 
+                         <input type="radio" name="userSex" id="userSex" value="1" checked="checked"> 男 
+                       </label> 
+               </div> 
+             </div> 
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="create-btn">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="update-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">更新用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="alert alert-danger" role="alert" id="update-error"></div>
+                    <div class="form-group">
+                        <label for="create-username" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="update-username" name='username' disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-password" class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="update-password" name='password'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-ms-password" class="col-sm-2 control-label">确认密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="update-ms-password" name='ms-password'>
+                        </div>
+                    </div>
+               <div class="form-group"> 
+               <label for="inputEmail3" class="col-sm-2 control-label">Email</label> 
+               <div class="col-sm-5"> 
+                <input type="email" class="form-control" id="update-email" placeholder="Email" name="email"> 
+               </div> 
+             </div> 
+
+                    <div class="form-group">
+                        <label for="create-address" class="col-sm-2 control-label">地址</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="update-address" name='address'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-age" class="col-sm-2 control-label">年龄</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="update-age" name='age'>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="update-btn" >更新</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">删除用户</h4>
+            </div>
+            <div class="modal-body">
+                确定删除用户 <span id="delete-username"></span> ?
+                <input type="hidden" id="delete-id"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="delete-btn">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{% block js %}        
+        <script type="text/javascript">
+  
+
+
+$(document).on('click','#adduser-btn',function(){
+
+        $('#create-dialog').modal('show')
+        $('#create-error').hide()
+    $(document).on('click','#create-btn',function(){ 
+        
+            var name =$('#create-username').val() 
+            var pass =$('#create-password').val() 
+            var ms_pass = $('#create-ms-password').val() 
+            var email =$('#create-email').val() 
+            var age =$('#create-age').val() 
+            var address =$('#create-address').val() 
+            var sex = document.getElementsByName('userSex') 
+            
+            var sexid  
+        if(name && pass && email && age && sex && address){ 
+            if(pass==ms_pass){
+                 for (var i =0;i<sex.length;i++){ 
+                    if(sex[i].checked) 
+                     sexid =i; 
+                 } 
+               console.log(sexid) 
+             $.post('/users',{"username":name,"password":pass,"email":email,"age":age,"address":address,"sex":sexid,"change":"add"},function(res){ 
+                //console.log(res)
+             if(res=='ok'){ 
+                    
+                   swal("添加成功!", "", "success") 
+                   $('#create-dialog').modal('hide')
+                    setTimeout('window.location.reload();', 2000);
+
+                  
+                }else if(res=='error'){
+                    //$('#create-dialog').modal('show')
+                    $('#create-error').text('账号已存在！！').show()
+                }else{ 
+                    
+                    swal("添加失败!", "", "error") 
+                    //$('#create-dialog').modal('show') 
+                }           
+                })
+            }else{
+              //$('#create-dialog').modal('show') 
+              $('#create-error').text('两次密码输入不一致！！').show()
+             }   
+          }else{ 
+            //alert('请将信息填入完整！！') 
+              //$('#create-dialog').modal('show') 
+              $('#create-error').text('请将信息填入完整！！').show()
+
+           }            
+
+    })
+ })
+
+
+$(document).on('click','#update-id',function(){
+        $('#update-error').hide()
+        $('#update-dialog').modal('show')
+        var username=$(this).attr('data-username')
+       var password=$(this).attr('data-password')
+       var sex=$(this).attr('data-sex')
+       var address=$(this).attr('data-addr')
+       var age=$(this).attr('data-age')
+       var email =$(this).attr('data-email')
+       $('#update-username').val(username) 
+       $('#update-address').val(address) 
+       $('#update-email').val(email)
+        $('#update-age').val(age) 
+       $(document).on('click','#update-btn',function(){ 
+            var name =$('#update-username').val() 
+            var pass =$('#update-password').val() 
+            var ms_pass = $('#update-ms-password').val() 
+            var email =$('#update-email').val() 
+            var age =$('#update-age').val() 
+            var address =$('#update-address').val() 
+                if(name && pass && ms_pass && email && age  && address){ 
+                    if(pass==ms_pass){ 
+                   swal({    
+                    title: "Are you sure?",    
+                    text: "Your will not be able to recover this imaginary file!",    
+                    type: "warning",    
+                    showCancelButton: true,    
+                    confirmButtonColor: "#DD6B55",    
+                    confirmButtonText: "修改",    
+                    closeOnConfirm: false  
+                    }, 
+                 
+                  function(){ 
+                    
+                      $.post('/users',{"username":name,"password":pass,"email":email,"age":age,"address":address,"change":"update"},function(res){ 
+                    if(res=='ok'){ 
+                        
+                       swal("Update success!", "", "success") 
+                        setTimeout('window.location.reload();', 2000);
+                       $('#update-dialog').modal('hide')
+
+                      }else{ 
+                         swal("Update failed!", "", "error") 
+                     } 
+                  }) 
+ 
+                  }); 
+                    }else{
+                    $('#update-dialog').modal('show') 
+                    $('#update-error').text('两次密码输入不一致！！').show()
+                    } 
+ 
+                }else{ 
+                    $('#update-error').text('请将信息填入完整！！').show()
+                 } 
+           })  
+
+ })
+
+$(document).on('click','#del-id',function(){
+     var username= $(this).attr('data-username') 
+
+ $(document).on('click','#delete-btn',function(){ 
+  console.log(username)
+         swal({    
+               title: "Are you sure?",    
+               text: "Your will not be able to recover this imaginary file!",    
+               type: "warning",    
+               showCancelButton: true,    
+               confirmButtonColor: "#DD6B55",    
+               confirmButtonText: "删除",    
+               closeOnConfirm: false  
+           },  
+      function(){  
+       $.post('/users',{"username":username,"change":"delete"},function(res){ 
+         if(res=='ok'){ 
+           //swal('success!')
+           setTimeout('window.location.reload();', 2000);
+           swal('success!')
+        }else{ 
+           swal('error!') 
+        } 
+         
+        $('#delete-dialog').modal('hide')
+       }) 
+     }); 
+  
+  }) 
+ })
+</script>
+
+
+{%endblock%}
+

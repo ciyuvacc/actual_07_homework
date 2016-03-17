@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>日志</title>
+    </head>
+    <body>
+        <table>
+           <thead>
+               <tr>
+                   <td valign="top" bgcolor="#FFFFFF" >Status</td>
+                   <td valign="top" bgcolor="#FFFFFF" >Url</td>
+                   <td valign="top" bgcolor="#FFFFFF" >Ip</td>
+                   <td valign="top" bgcolor="#FFFFFF" >Count</td>
+               </tr>
+           </thead>
+           <tbody>
+           {% for log in logs %}
+               <tr>
+                   <td>{{log[0]}}</td>
+                   <td>{{log[1]}}</td>
+                   <td>{{log[2]}}</td>
+                   <td>{{log[3]}}</td>
+               </tr>
+           {% endfor %}
+           </tbody>
+        </table>
+	<hr/>
+    </body>
+</html>

@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% block title %}资产管理{% endblock %}
+{% block link %}
+<link href="{{url_for('static', filename='bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='bootstrap-slider/css/bootstrap-slider.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block topfathermem %}<li class="active"><a href="#">CMDB系统 >></a></li>{% endblock %}>
+{% block topsonmem %}<li class="active"><a href="/assets">资产管理</a></li>{% endblock %}
+{% block leftassetactive %}class="col-md-offset-2"{% endblock %}
+{% block main %}
+<div class="row">
+  <div class="col-md-1">
+      <button id="nowserver-btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-dialog" data-backdrop="false">新建</button>
+  </div>
+  <div class="col-md-11">
+    <form action="/assets/" method="post" class="form-inline">
+        <div class="form-group"/>
+        <input type="text" class="form-control" name="query" value="{{query}}"/>
+        <input type="submit" class="btn btn-default" value="查询"/>
+        </div>
+    </form>
+  </div>
+</div>
+<br/>
+<table class="table table-bordered table-striped  table-hover table-condensed" id="host-table">
+
+ 
+</table>
+<div class="row">
+  <div class="col-md-3">
+  <nav class="nav-btn-right">
+    <ul class="pagination" id="pagefenye"></ul>
+  </nav>
+  </div>
+</div>
+<div class="modal fade" id="create-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">新建</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="sn" class="col-sm-2 control-label">编号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="sn">
+          </div>
+          </div>
+          <div class="form-group">
+            <label for="ip" class="col-sm-2 control-label">IP地址</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="ip">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="hostname" class="col-sm-2 control-label">主机名</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="hostname">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="machine_room_id" class="col-sm-2 control-label">机房</label>
+            <div class="col-sm-10">
+              <select id="machine_room_id" class="form-control">
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bussiness" class="col-sm-2 control-label">业务</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="bussiness">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="admin" class="col-sm-2 control-label">使用者</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="admin">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cpu" class="col-sm-2 control-label">CPU</label>
+            <div class="col-sm-10">
+              <!--<input type="text" class="form-control" id="cpu">-->
+              <input id="cpu" class="form-control" data-slider-id='cpu-slider' type="text" data-slider-min="1" data-slider-max="56" data-slider-step="1" data-slider-value="28"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ram" class="col-sm-2 control-label">内存</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="ram" data-slider-id='ram-slider' data-slider-min="1" data-slider-max="128" data-slider-step="1" data-slider-value="16">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="disk" class="col-sm-2 control-label">硬盘</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="disk" data-slider-id='disk-slider' data-slider-min="1" data-slider-max="2048" data-slider-step="1" data-slider-value="512">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="os" class="col-sm-2 control-label">操作系统</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="os">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="model" class="col-sm-2 control-label">型号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="model">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="purchase_date" class="col-sm-2 control-label">采购时间</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="purchase_date">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="vendor" class="col-sm-2 control-label">厂商</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="vendor">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary btn-create">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{%endblock%}
+{% block js %}
+
+          <script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js')}}"></script>
+      <script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js')}}"></script>
+    <script src="{{url_for('static', filename='bootstrap-slider/js/bootstrap-slider.min.js')}}"></script>
+            <script type="text/javascript">
+function getlist(){ 
+      var page={{page}}
+      $.get('/getserverdata?page='+page,function(res){
+        var res =JSON.parse(res)
+        var data=res.data
+        var row_header = '<thead><tr><th>ID</th><th>SN</th><th>IP(主机名)</th><th>业务(使用者)</th><th>机房</th><th>配置(cup,ram,disk)</th><th>操作系统</th><th>型号</th><th>采购时间</th><th>厂商</th><th>操作</th></tr></thead>'
+                 $.each(data,function(index,value){ 
+                 row_header += '<tr>' 
+                 row_header += '<td>'+value[0]+'</td>' 
+                 row_header += '<td>'+value[1]+'</td>' 
+                 row_header += '<td>'+value[2]+'('+value[3]+')'+'</td>' 
+                 row_header += '<td>'+value[4]+'</td>'
+                 row_header += '<td>'+value[5]+'('+value[6]+')'+'</td>' 
+                 row_header += '<td><li>CPU: '+value[7]+ '核</li><li>内存: '+value[8] +'G</li><li>硬盘: '+value[9]+' G</li></td>'  
+                 row_header += '<td>'+value[10]+'</td>'
+                 row_header += '<td>'+value[11]+'</td>'
+                 row_header += '<td>'+value[12]+'</td>'
+                 row_header += '<td>'+value[13]+'</td>'
+                 row_header += '<td><a data-id="'+value[0]+'" data-host="'+value[1]+'"  class="btn btn-link  del-btn">删除</a>' 
+                 row_header += '<a data-id="'+value[0]+'" data-host="'+value[1]+'"  data-ip="'+value[2]+'" data-mem="'+value[3]+'" data-ent="'+value[4]+'"  class="btn btn-link  update-btn">更新</a></td>' 
+                 row_header += '<tr>' 
+                 }) 
+                 $('#host-table').html(row_header) 
+
+            var tmpli='<li>第 '+res.nowpage+' 页, 共 '+res.maxpage+' 页</li>'
+            if (res.nowpage==1){
+             var tmp11='<li class="disabled"><a  aria-label="Previous" href="javascript:void(0);"><span aria-hidden="true">&laquo;</span></a></li>'
+            }else{
+             var tmp11='<li><a href="?page='+res.lastpage+'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>' 
+            }
+            
+           var tmp22='' 
+           for (var i=res.startpage;i<=res.endpage;i++){ 
+                tmp22+='<li><a href="?page='+i+'">'+i+'</a></li>' 
+               }; 
+          if (res.nowpage==res.maxpage){
+           var tmp33 = '<li class="disabled"><a href="javascript:void(0);" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>' 
+          }else{
+           var tmp33 = '<li><a href="?page='+res.nextpage+'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>' 
+          }
+
+          $('#pagefenye').html( tmp11 + tmp22 + tmp33 +tmpli  ) 
+
+
+
+      })
+}
+
+getlist()
+
+
+jQuery(document).ready(function() {
+
+  jQuery('#purchase_date').datetimepicker({
+    language:  'zh-CN',
+    format: 'yyyy-mm-dd',
+    minView: 2
+  });
+  $('#cpu').slider({
+      formatter: function(value) {
+        return 'CPU: ' + value + '核';
+      }
+  });
+  $('#ram').slider({
+      formatter: function(value) {
+        return '内存: ' + value + 'G';
+      }
+  });
+  $('#disk').slider({
+      formatter: function(value) {
+        return '硬盘: ' + value + 'G';
+      }
+  });
+
+
+});
+
+
+
+
+</script>
+{%endblock%}

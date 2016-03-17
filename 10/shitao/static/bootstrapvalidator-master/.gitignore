@@ -1,0 +1,5 @@
+.idea
+_gh_pages
+node_modules
+bower_components
+/nbproject/private/

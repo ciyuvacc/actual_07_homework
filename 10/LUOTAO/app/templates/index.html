@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}主页{% endblock %}
+{% block link %}
+<link href="{{url_for('static', filename='bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='bootstrap-slider/css/bootstrap-slider.min.css')}}" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+<div class="row">
+  <div class="col-md-1">
+      欢迎使用！！
+  </div>
+</div>
+
+
+{%endblock%}
+{% block js %}
+
+
+{%endblock%}

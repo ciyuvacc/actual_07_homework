@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="utf-8" />
+        <title>用户列表</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      /*  .mycontainer { margin-top: 70px;}*/
+    body {
+      padding-top: 50px;
+    }
+
+    .sub-header {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .navbar-fixed-top {
+      border: 0;
+    }
+    .sidebar {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding: 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+      }
+    }
+
+    .nav-sidebar {
+      margin-right: -21px;
+      margin-bottom: 20px;
+      margin-left: -20px;
+    }
+    .nav-sidebar > li > a {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+    .nav-sidebar > .active > a,
+    .nav-sidebar > .active > a:hover,
+    .nav-sidebar > .active > a:focus {
+      color: #fff;
+      background-color: #428bca;
+    }
+
+    .main {
+      padding: 20px;
+    }
+    @media (min-width: 768px) {
+      .main {
+        padding-right: 40px;
+        padding-left: 40px;
+      }
+    }
+    .main .page-header {
+      margin-top: 0;
+    }
+    </style>
+    </head>
+    <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="javascript:void(0);">Cmdb</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="javascript:void(0);">欢迎{{session['user']['username']}},</a></li>
+            <li><a href="/logout">退出</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid ">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="/users">用户管理</a></li>
+            <li><a href="/hosts">主机管理</a></li>
+          </ul>
+        </div>
+        <div class="col-md-10 col-md-offset-2 main">
+        <form action="/users/" method="post" class="form-inline ">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#adduser" >添加用户</button>
+            <div class="input-group">
+                  <input type="text" placeholder="请输入用户名" class="form-control" name="selectuser" value="{{ selectuser }}"/>
+              <span class="input-group-btn">
+                  <input type="submit" class="btn btn-primary" value="查询"/>
+              </span>
+            </div>
+        </form>
+        <br>
+        <table  class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>用户ID</th>
+                    <th>用户名</th>
+                    <th>密码</th>
+                    <th>邮箱</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{user['id']}}</td>
+                    <td>{{user['username']}}</td>
+                    <td>{{user['password']}}</td>
+                    <td>{{user['email']}}</td>
+                    <td>{{user['create_time']}}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateuser" data-username="{{user['username']}}" data-email="{{ user['email'] }}" data-id="{{user['id']}}">更新</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteuser" data-username="{{user['username']}}">删除</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+        <!-- 更新用户信息-->
+        <div class="modal fade" id="updateuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">更新信息</h4>
+              </div>
+              <div class="modal-body">
+               <form class="form-horizontal">
+                <div class="alert alert-danger" role="alert" id="error"></div>
+                <input type="hidden" id="id" name="id"/>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">密码：</label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="password" name='password'>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label">邮箱：</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="email" name='email'>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="btn-update">更新</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 添加用户-->
+        <div class="modal fade" id="adduser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+              </div>
+              <div class="modal-body">
+               <form class="form-horizontal">
+                <div class="alert alert-danger" role="alert" id="adderror"></div>
+                  <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label" >用户名:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="addusername" name='username' placeholder="用户名">
+                    </div>
+                  </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">密码:</label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="addpassword" name='password' placeholder="密码">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label">邮箱:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="addemail" name='email'placeholder="邮箱">
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="btn-adduser">添加</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 删除用户-->
+        <div class="modal fade" id="deleteuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">删除用户</h4>
+              </div>
+              <div class="modal-body">
+                确认要删除该用户吗？
+              </div>
+              <div class="modal-footer">
+                  <div class="alert alert-success" role="alert" id="delsucess"></div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="btn-delete">删除</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript">
+        jQuery(document).ready(function() {
+            // 更新用户
+            jQuery('#updateuser').on('show.bs.modal', function (event) {
+              var button = jQuery(event.relatedTarget); //使用event.relatedTarget以及HTML的data-* 属性根据点击的是哪个按钮，多样化模态框的内容
+              var username = button.data('username');   //获取username的值根据html上面的data-username={user['username']}
+              var modal = jQuery(this);
+              jQuery('#error').hide();
+              modal.find('.modal-title').text('更新用户 ' + username + '信息');
+              modal.find('#id').val(button.data('id'));
+              modal.find('#password').val(button.data('password'));
+              modal.find('#email').val(button.data('email'));
+            });
+            jQuery('#btn-update').on('click', function() {
+                var id = jQuery('#id').val(),  // 获取id等于id的values值给新的变量id
+                    password = jQuery('#password').val(),
+                    email = jQuery('#email').val();
+                    jQuery.post('/updateuser/', {
+                        'id' : id,
+                        'password' : password,
+                        'email' : email
+                    }, function(data){
+                        console.log(data);
+                        if(data['ok']) {
+                            jQuery('#updateuser').modal('hide');
+                            window.location.reload();
+                        } else {
+                            jQuery('#error').text(data['result']);
+                            jQuery('#error').show();
+                        }
+                    }, 'json');
+            });
+
+            //添加用户
+            jQuery('#adduser').on('show.bs.modal',function (event){
+               jQuery('#adderror').hide();
+            });
+            jQuery('#btn-adduser').on('click',function() {
+                var username = jQuery('#addusername').val(),
+                        password = jQuery('#addpassword').val(),
+                        email = jQuery('#addemail').val();
+                jQuery.post('/adduser/',{
+                   'username' : username,
+                   'password' : password,
+                   'email' : email
+                },function(data){
+                    if(data['ok']) {
+                        jQuery('#adduser').modal('hide');
+                        window.location.reload();
+                    } else {
+                        jQuery('#adderror').text(data['result']);
+                        jQuery('#adderror').show();
+                    }
+                }, 'json');
+            });
+
+            //删除用户
+            jQuery('#deleteuser').on('show.bs.modal', function (event) {
+             jQuery('#delsucess').hide();
+              var button = jQuery(event.relatedTarget);
+              var username = button.data('username');
+              var modal = jQuery(this);
+              modal.find('.modal-title').text('删除用户 ' + username + '信息');
+                jQuery('#btn-delete').on('click', function() {
+                    jQuery.post('/deleteuser/', {
+                        'username' : username
+                    }, function(data){
+                        if(data['ok']) {
+                            jQuery('#delsucess').text(data['result']);
+                            jQuery('#delsucess').show();
+                            setTimeout(function(){
+                            window.location.reload(1);
+                            },500);
+                        }
+                    }, 'json');
+                      });
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock %}</title>
+        <link href="{{ url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='css/sweetalert.css')}}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='css/jquery-ui.css')}}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='css/dashboard.css')}}" rel="stylesheet">
+        {% block link %}{% endblock %}
+        <style type="text/css">
+        .mycontainer { margin-top: 10px;}
+        .sidebar {
+            position: fixed;
+            top: 51px;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            display: block;
+            padding: 20px;
+            overflow-x: hidden;
+            overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+            background-color: #f5f5f5;
+            border-right: 1px solid #eee;
+          }
+        }
+
+        .nav-sidebar {
+          margin-right: -21px; /* 20px padding + 1px border */
+          margin-bottom: 20px;
+          margin-left: -20px;
+        }
+        .nav-sidebar > li > a {
+          padding-right: 20px;
+          padding-left: 20px;
+        }
+        .nav-sidebar > .active > a,
+        .nav-sidebar > .active > a:hover,
+        .nav-sidebar > .active > a:focus {
+          color: #fff;
+          background-color: #428bca;
+        }
+        .main {
+            padding-right: 40px;
+            padding-left: 40px;
+        }
+        .main .page-header {
+          margin-top: 0;
+        }
+        </style>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="javascript:void(0);">DevOps</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                  {% block topfathermem %}{% endblock %}>
+                  {% block topsonmem %}{% endblock %}>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="javascript:void(0);">欢迎 {{session['username']}}！ </a></li>
+                <li><a href="/logout">退出</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+
+        <div class="container-fluid mycontainer">
+          <div class="row">
+            <div class="col-md-2 sidebar">
+              <ul class="nav nav-sidebar">
+              <li class="active" id="cmdb"><a href="#">CMDB系统 <span class="sr-only">(current)</span></a></li>
+              
+                <li  {% block leftuseractive %}{% endblock %}><a href="/users">用户管理</a></li>
+                <li {% block leftassetactive %}{% endblock %}><a href="/assets">资产管理</a></li>
+              </ul>
+                <ul class="nav nav-sidebar"> 
+          <li class="active" id="monitor"><a href="#">工具使用</a></li> 
+             <li class="monitor-menu"><a href="/jisuanqi">计算器</a></li> 
+           </ul> 
+           <ul class="nav nav-sidebar"> 
+          <li class="active" id="code"><a href="#">日志系统</a></li> 
+             <li class="code-menu"><a href="/log">日志查询</a></li> 
+           </ul> 
+            <ul class="nav nav-sidebar"> 
+             <li class="active" id="zhanghu"><a href="#">账户管理</a></li> 
+              <li class="user-menu"><a href="/upuser">修改账号</a></li> 
+              <li class="user-menu"><a href="#">管理账户</a></li> 
+            </ul> 
+  
+            </div>
+             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">  <!--main-->
+             {% block main %} 
+             {% endblock %}
+              </div>
+            </div>
+          </div>
+
+        
+            
+            
+      <script src='/static/js/jquery.js'> </script>
+      <script src='/static/js/jquery-ui.js'></script>
+      <script src="/static/js/sweetalert.min.js"></script>
+      <script src={{url_for('static',filename="js/jquery-1.12.1.min.js")}}></script>
+      <script src={{url_for('static',filename="js/bootstrap.min.js")}}></script> 
+      <script type="text/javascript">
+     
+            $('#cmdb').click(function(){  
+              $('.cmdb-menu').slideToggle("slow");   
+            });
+
+            $('.monitor-menu').hide(); // default hide()  
+            $('#monitor').click(function(){ //click hide or show 
+                 $('.monitor-menu').slideToggle("slow");   
+             }); 
+  
+             $('#code').click(function(){  
+                 $('.code-menu').slideToggle("slow");   
+             }); 
+  
+  
+             $('.user-menu').hide();   
+             $('#zhanghu').click(function(){  
+                 $('.user-menu').slideToggle("slow");   
+             }); 
+      </script>
+
+        {% block js%}
+        {% endblock %}
+        
+    </body>
+</html>
