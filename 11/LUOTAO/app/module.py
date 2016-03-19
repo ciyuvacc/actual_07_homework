@@ -3,7 +3,14 @@
 from . import app
 import math
 import hashlib
+import time
+import paramiko
+#import logging
+import traceback
 
+
+
+#logger = logging.getLogger(__name__)
 
 from functools import wraps
 from flask import session,redirect
@@ -162,5 +169,98 @@ class Server(object):
         return data_list
 
    
+class Monitor(object):
+    def  __init__(self,ip,mtime,cpu,mem):
+        self.ip = ip
+        self.mtime = mtime
+        self.cpu = cpu
+        self.mem = mem
+    def save(self):
+        _sql = 'insert into monitor(ip,mtime,cpu,mem)values(%s,%s,%s,%s)'
+        #print _sql,(self.ip,self.mtime,self.cpu,self.mem)
+        tmp = app.config['cursor']._execute(_sql,(self.ip,self.mtime,self.cpu,self.mem))
+        data= tmp['cur'].fetchall()
+        return data
 
+    @classmethod
+    def getData(cls, ip):
+        _sql = 'select * from monitor where ip = %s and mtime >= %s order by mtime asc'
+        mtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 60 * 60))
+        print _sql,(ip, mtime)
+        tmp = app.config['cursor']._execute(_sql,(ip, mtime))
+        _res= tmp['cur'].fetchall()
+        print _res
+        print '00000000'
+        _times = []
+        _cpu_data = [] 
+        _mem_data = []
+        for _rs in _res:
+            _cpu, _mem, _time = _rs[2], _rs[3], _rs[4]          
+            _times.append(_time.strftime('%H:%M'))
+            _cpu_data.append(_cpu)
+            _mem_data.append(_mem)
+        return {'categories' : _times, 'series' : [{'name' : 'CPU', 'data' : _cpu_data}, {'name' : '内存', 'data' : _mem_data}]}
+        
+class SshConnect(object):
+    def  __init__(self,ip,username,port):
+        self.ip = ip
+        self.username = username
+        self.port = port
+
+    def pass_connect(self, pwd, commands=[]):
+        ssh = None 
+        data = {}
+        data['cmd']={}
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(self.ip, self.port, self.username, pwd)
+            print self.ip, self.port, self.username, pwd
+            for cmd in commands:
+                #logger.info('exec %s', cmd)
+                print 'exec %s' % cmd
+                stdin, stdout, stderr = ssh.exec_command(cmd)
+                #logger.info('results:%s', stdout.readlines())
+                data['status'] = 'ok'
+                data['cmd'][cmd]= stdout.readlines()
+            return data
+        except BaseException as e:
+            data['status'] = 'error'
+            #logger.error('connect ssh error %s:%s ',self.ip, self.port)
+            #logger.error(traceback.format_exc())
+            print 'connect ssh error %s:%s ' % (self.ip, self.port)
+            print e
+        finally:
+            if ssh is not None:
+                ssh.close()
+            return data
+
+    def key_connect(self, commands=[]):
+        ssh = None 
+        data = {}
+        data['cmd']={}
+        try:
+            private_key_path = '/home/%s/.ssh/id_rsa' % (self.username)
+            key = paramiko.RSAKey.from_private_key_file(private_key_path)            
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(self.ip, self.port, self.username, '123',key)           
+            for cmd in commands:
+                #logger.info('exec %s', cmd)
+                print 'exec %s' % cmd
+                stdin, stdout, stderr = ssh.exec_command(cmd)
+                #logger.info('results:%s', stdout.readlines())
+                data['status'] = 'ok'
+                data['cmd'][cmd]= stdout.readlines()
+            return data
+        except BaseException as e:
+            data['status'] = 'error'
+            #logger.error('connect ssh error %s:%s ',self.ip, self.port)
+            #logger.error(traceback.format_exc())
+            print 'connect ssh error %s:%s ' % (self.ip, self.port)
+            print e
+        finally:
+            if ssh is not None:
+                ssh.close()
+            return data
 

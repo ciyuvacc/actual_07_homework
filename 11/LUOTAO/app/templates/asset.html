@@ -3,6 +3,7 @@
 {% block link %}
 <link href="{{url_for('static', filename='bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
 <link href="{{url_for('static', filename='bootstrap-slider/css/bootstrap-slider.min.css')}}" rel="stylesheet">
+
 {% endblock %}
 {% block topfathermem %}<li class="active"><a href="#">CMDB系统 >></a></li>{% endblock %}>
 {% block topsonmem %}<li class="active"><a href="/assets">资产管理</a></li>{% endblock %}
@@ -155,6 +156,74 @@
   </div>
 </div>
 
+
+
+<div class="modal fade" id="action-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">操作</h4>
+      </div>
+      <div class="modal-body">
+            <div class="form-group">
+            <label for="ip" class="col-sm-2 control-label ">IP地址</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="actionip" disabled>
+            </div>
+          </div>
+
+              <div class="form-group"> 
+               <label for="inputlogin" class="col-sm-2 control-label label-ssh" >登陆方式</label> 
+               <div class="col-sm-10"> 
+                       <label class="radio-inline  "> 
+                         <input type="radio" name="userlogin" id="userpass" value="pass"> password 
+                       </label> 
+                       <label class="radio-inline"> 
+                         <input type="radio" name="userlogin" id="userkey" value="key" checked="checked"> key 
+                       </label> 
+               </div> 
+             </div> 
+
+      <div class="modal-body">
+            <div class="form-group">
+            <label for="ip" class="col-sm-2 control-label "></label>
+            <div class="col-sm-10" id="ssh-pass">
+              
+            </div>
+          </div>
+
+             <br>
+            <div class="form-group">
+            <label for="inputcommand" class="col-sm-2 control-label">操作</label>
+            <div class="col-sm-10">
+            
+            <textarea name="comment" id="actionarea" class="form-control">请在此处输入文本...</textarea> 
+            </div>
+          </div>
+
+            <div class="form-group">
+            <label for="inputcommand" class="col-sm-2 control-label">明细</label>
+            <div class="col-sm-10">
+            
+            <div class="alert" role="alert" id="actionlist"></div>
+            </div>
+          </div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary btn-clean">清空</button>
+        <button type="button" class="btn btn-primary btn-action">执行</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 {%endblock%}
 {% block js %}
 
@@ -183,7 +252,8 @@ function getlist(){
                  row_header += '<td>'+value[13]+'</td>'
                  row_header += '<td><a data-id="'+value[0]+'" data-host="'+value[1]+'"  class="btn btn-link  del-btn">删除</a>' 
                  row_header += '<a data-id="'+value[0]+'" data-host="'+value[1]+'"  data-ip="'+value[2]+'" data-mem="'+value[3]+'" data-ent="'+value[4]+'"  class="btn btn-link  update-btn">更新</a>' 
-                 row_header += '<a id="showstatus"  class="btn btn-link" data-toggle="modal" data-target="#show-dialog">查看</a></td>'
+                 row_header += '<a id="showstatus" data-id="'+value[0]+'" data-ip="'+value[2]+'"  class="btn btn-link" data-toggle="modal" data-target="#show-dialog">查看</a>'
+                 row_header += '<a id="actionstatus" data-id="'+value[0]+'" data-ip="'+value[2]+'"  class="btn btn-link" data-toggle="modal" data-target="#action-dialog">操作</a></td>'
                  row_header += '<tr>' 
 
                  }) 
@@ -216,6 +286,10 @@ function getlist(){
 getlist()
 
 
+
+
+
+
 jQuery(document).ready(function() {
 
   jQuery('#purchase_date').datetimepicker({
@@ -244,35 +318,112 @@ jQuery(document).ready(function() {
 
 
 
+
+$(document).on('click','#userpass',function(){
+  $('#ssh-pass').html() 
+var sshhead= '用户名：<input type="text" class="form-control" id="user-name">'
+     sshhead+= '密码：<input type="password" class="form-control" id="user-pass">'
+     $('#ssh-pass').html( sshhead  ) 
+})
+$(document).on('click','#userkey',function(){
+    $('#ssh-pass').html() 
+var sshhead= '用户名：<input type="text" class="form-control" id="user-name">'
+     sshhead+= 'key：<input type="file" name="img" class="form-control" id="user-key">'
+     $('#ssh-pass').html( sshhead  ) 
+})
+     
+  $(document).on('click','.btn-clean ',function(){
+       $('#actionarea').val('') 
+       $('#actionlist').html('') 
+        $('#actionlist').hide()
+  })
+$(document).on('click','#actionstatus',function(){
+        $('#action-dialog').modal('show')
+        var host_ip=$(this).attr('data-ip')
+        $('#actionip').val(host_ip)
+         $('#user-name').val('')
+         $('#actionarea').val('')
+
+
+  $(document).on('click','.btn-action ',function(){
+
+        var obj  = document.getElementsByName('userlogin');
+        var sshconnect  
+        var actionarea = $('#actionarea').val() 
+        $('#actionlist').hide()
+        for(var i=0;i<obj.length;i++){
+            if(obj[i].checked==true){
+                sshconnect=obj[i].value
+            }
+        }
+         var sshname = $('#user-name').val() 
+        if (sshconnect=='pass'){
+          var sshpass =  $('#user-pass').val() 
+        }else if (sshconnect=='key'){
+          var sshpass =  $('#user-key').val() 
+        }
+    $.post('/action/',{"ip":host_ip,"sshconnect":sshconnect,"actionarea":actionarea,"sshname":sshname,"sshpass":sshpass},function(res){
+         var res =JSON.parse(res),
+             status=res.status,
+             cmd= res.cmd;
+        console.log(status)
+      var row_header = '执行结果：'+ '<br>'
+        if (status=="error"){
+           $('#actionlist').show()
+          $('#actionlist').removeClass('alert-success').addClass('alert-danger')
+          row_header+= '执行失败！！'
+
+        }else if (status=="ok"){
+          $('#actionlist').show()
+         $('#actionlist').removeClass('alert-danger').addClass('alert-success')
+        }
+        
+    $.each(cmd,function(index,value){
+           row_header +='<br>' + index +' :'+ '<br>'
+          $.each(value,function(i,v){
+              row_header += '   ' +v+ '<br>'
+          })//--each 
+       }) //--each
+      
+         $('#actionlist').html( row_header  ) 
+     })  //---post
+        
+
+  })
+
+})
+
+
 jQuery('#show-dialog').on('show.bs.modal',function(event){
     var button = $(event.relatedTarget),
         host_id = button.data('id'),
         host_ip = button.data('ip'),
         categories = [],
         series =[];
-    jQuery.get('/moniters/' + host_ip + '/', function(res) {
+
+function mymonitors(){ 
+
+ jQuery.get('/monitors/' + host_ip + '/', function(res) {
       categories = res['data']['categories'];
       series = res['data']['series'];
-  console.log('111111111111111111')
-  console.log(series)    
-      }, 'json');
 
+  
 
 $('#host-show').highcharts({
         title: {
-            text: 'Monthly Average Temperature',
+            text: '主机' + host_ip + '的CPU，内存使用情况',
             x: -20 //center
         },
         subtitle: {
-            text: 'Source: WorldClimate.com',
+            text: 'Monitor',
             x: -20
         },
         xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            categories: categories
         },
         yAxis: {
             title: {
-                text: 'Temperature (°C)'
+                text: '使用率'
             },
             plotLines: [{
                 value: 0,
@@ -281,7 +432,7 @@ $('#host-show').highcharts({
             }]
         },
         tooltip: {
-            valueSuffix: '°C'
+            valueSuffix: '%'
         },
         legend: {
             layout: 'vertical',
@@ -289,20 +440,19 @@ $('#host-show').highcharts({
             verticalAlign: 'middle',
             borderWidth: 0
         },
-        series: [{
-            name: 'Tokyo',
-            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-        }, {
-            name: 'New York',
-            data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-        }, {
-            name: 'Berlin',
-            data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-        }, {
-            name: 'London',
-            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-        }]
+        series: series
     });
+      }, 'json');
+
+}
+
+
+mymonitors()
+$(document).on('mouseenter','#host-show',function(){
+setTimeout(mymonitors(),5000);
+
+})
+
 
 })
 

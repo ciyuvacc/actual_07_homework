@@ -1,0 +1,116 @@
+{% extends 'layout.html' %}
+{% block title%}用户管理{% endblock %}
+{% block topuseractive %}class="active"{% endblock %}
+{% block leftuseractive %}class="active"{% endblock %}
+{% block container %}
+<form action="/users/" method="post" class="form-inline">
+    <div class="form-group"/>
+    <input type="text" class="form-control" name="query" value="{{query}}"/>
+    <input type="submit" class="btn btn-default" value="查询"/>
+    <a href="/createUser/">添加</a>
+    </div>
+</form>
+<br/>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>用户名</th>
+            <th>手机号</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{user['username']}}</td>
+            <td>{{user['telephone']}}</td>
+            <td>{{user['age']}}</td>
+            <td>{{user['sex']}}</td>
+            <td>{{user['status']}}</td>
+            <td>
+                <!--
+                <a href="/modifyUser/?id={{user['id']}}">修改</a>
+                <a href="/deleteUser/?id={{user['id']}}">删除</a>
+                -->
+
+                <a data-toggle="modal" data-target="#updateDialog" data-username="{{user['username']}}" data-telephone="{{user['telephone']}}" data-age="{{user['age']}}" data-id="{{user['id']}}">
+更新
+</>
+                <a href="/deleteUser/?id={{user['id']}}">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+<div class="modal fade" id="updateDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">更新用户</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+        <div class="alert alert-danger" role="alert" id="error"></div>
+        <input type="hidden" id="id" name="id"/>
+        <div class="form-group">
+            <label for="telephone" class="col-sm-2 control-label">手机号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="telephone" name='telephone'>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="age" class="col-sm-2 control-label">年龄</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="age" name='age'>
+            </div>
+          </div>
+          
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" id="btn-update">更新</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+jQuery(document).ready(function() {
+    jQuery('#updateDialog').on('show.bs.modal', function (event) {
+      var button = jQuery(event.relatedTarget);
+      var username = button.data('username');
+      var modal = jQuery(this);
+      jQuery('#error').hide();
+      modal.find('.modal-title').text('更新用户 ' + username + '信息');
+      modal.find('#id').val(button.data('id'));
+      modal.find('#telephone').val(button.data('telephone'));
+      modal.find('#age').val(button.data('age'));
+    });
+    jQuery('#btn-update').on('click', function() {
+        var id = jQuery('#id').val(),
+            telephone = jQuery('#telephone').val(),
+            age = jQuery('#age').val();
+            jQuery.post('/updateUser/', {
+                'id' : id,
+                'telephone' : telephone,
+                'age' : age
+            }, function(data){
+                console.log(data);
+                if(data['ok']) {
+                    jQuery('#updateDialog').modal('hide');
+                    window.location.reload(); 
+                } else {
+                    jQuery('#error').text(data['result']);
+                    jQuery('#error').show();
+                }
+            }, 'json');
+    });
+});
+{% endblock %}

@@ -10,7 +10,7 @@
 {% block main %}
 <div class="row">
   <div class="col-md-1">
-      <button id="nowserver-btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-dialog" data-backdrop="false">新建</button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-dialog" data-backdrop="false">新建</button>
   </div>
   <div class="col-md-11">
     <form action="/assets/" method="post" class="form-inline">
@@ -22,19 +22,50 @@
   </div>
 </div>
 <br/>
-<table class="table table-bordered table-striped  table-hover table-condensed" id="host-table">
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>SN</th>
+            <th>IP(主机名)</th>
+            <th>机房</th>
+            <th>业务(使用者)</th>
+            <th>配置(cup,ram,disk)</th>
+            <th>操作系统</th>
+            <th>型号</th>
+            <th>采购时间</th>
+            <th>厂商</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
 
- 
+    </tbody>
+    <tfoot></tfoot>
 </table>
 <div class="row">
   <div class="col-md-3">
-  <nav class="nav-btn-right">
-    <ul class="pagination" id="pagefenye"></ul>
-  </nav>
+    <div class="pagination-num">第 {{pageNum}} 页, 共 {{maxPageNum}} 页</div>
+  </div>
+  <div class="col-md-9">
+    <nav class="nav-page">
+      <ul class="pagination">
+        <li
+        >
+
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <li
+        >
+
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
-
-
 <div class="modal fade" id="create-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -135,88 +166,15 @@
 </div>
 
 
-
-
-<div class="modal fade" id="show-dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">查看</h4>
-      </div>
-      <div class="modal-body">
-      <div id="host-show" style="width:500px;height:280pxl"></div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 {%endblock%}
 {% block js %}
-
+          <script src='/static/js/jquery.js'> </script>
+          <script src='/static/js/jquery-ui.js'></script>
+          <script src="/static/js/sweetalert.min.js"></script> 
           <script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js')}}"></script>
-      <script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js')}}"></script>
-    <script src="{{url_for('static', filename='bootstrap-slider/js/bootstrap-slider.min.js')}}"></script>
-        <script src="{{url_for('static', filename='Highcharts-4.2.3/js/highcharts.js')}}"></script>
+<script src="{{url_for('static', filename='bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js')}}"></script>
+    
             <script type="text/javascript">
-function getlist(){ 
-      var page={{page}}
-      $.get('/getserverdata?page='+page,function(res){
-        var res =JSON.parse(res)
-        var data=res.data
-        var row_header = '<thead><tr><th>ID</th><th>SN</th><th>IP(主机名)</th><th>业务(使用者)</th><th>机房</th><th>配置(cup,ram,disk)</th><th>操作系统</th><th>型号</th><th>采购时间</th><th>厂商</th><th>操作</th></tr></thead>'
-                 $.each(data,function(index,value){ 
-                 row_header += '<tr>' 
-                 row_header += '<td>'+value[0]+'</td>' 
-                 row_header += '<td>'+value[1]+'</td>' 
-                 row_header += '<td>'+value[2]+'('+value[3]+')'+'</td>' 
-                 row_header += '<td>'+value[4]+'</td>'
-                 row_header += '<td>'+value[5]+'('+value[6]+')'+'</td>' 
-                 row_header += '<td><li>CPU: '+value[7]+ '核</li><li>内存: '+value[8] +'G</li><li>硬盘: '+value[9]+' G</li></td>'  
-                 row_header += '<td>'+value[10]+'</td>'
-                 row_header += '<td>'+value[11]+'</td>'
-                 row_header += '<td>'+value[12]+'</td>'
-                 row_header += '<td>'+value[13]+'</td>'
-                 row_header += '<td><a data-id="'+value[0]+'" data-host="'+value[1]+'"  class="btn btn-link  del-btn">删除</a>' 
-                 row_header += '<a data-id="'+value[0]+'" data-host="'+value[1]+'"  data-ip="'+value[2]+'" data-mem="'+value[3]+'" data-ent="'+value[4]+'"  class="btn btn-link  update-btn">更新</a>' 
-                 row_header += '<a id="showstatus"  class="btn btn-link" data-toggle="modal" data-target="#show-dialog">查看</a></td>'
-                 row_header += '<tr>' 
-
-                 }) 
-                 $('#host-table').html(row_header) 
-
-            var tmpli='<li>第 '+res.nowpage+' 页, 共 '+res.maxpage+' 页</li>'
-            if (res.nowpage==1){
-             var tmp11='<li class="disabled"><a  aria-label="Previous" href="javascript:void(0);"><span aria-hidden="true">&laquo;</span></a></li>'
-            }else{
-             var tmp11='<li><a href="?page='+res.lastpage+'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>' 
-            }
-            
-           var tmp22='' 
-           for (var i=res.startpage;i<=res.endpage;i++){ 
-                tmp22+='<li><a href="?page='+i+'">'+i+'</a></li>' 
-               }; 
-          if (res.nowpage==res.maxpage){
-           var tmp33 = '<li class="disabled"><a href="javascript:void(0);" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>' 
-          }else{
-           var tmp33 = '<li><a href="?page='+res.nextpage+'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>' 
-          }
-
-          $('#pagefenye').html( tmp11 + tmp22 + tmp33 +tmpli  ) 
-
-
-
-      })
-}
-
-getlist()
-
-
-jQuery(document).ready(function() {
 
   jQuery('#purchase_date').datetimepicker({
     language:  'zh-CN',
@@ -239,73 +197,49 @@ jQuery(document).ready(function() {
       }
   });
 
+        jQuery(document).ready(function() {
+            jQuery('#updateDialog').on('show.bs.modal', function (event) {
+              var button = jQuery(event.relatedTarget);
+              var username = button.data('username');
+              var modal = jQuery(this);
+              jQuery('#error').hide();
+              modal.find('.modal-title').text('更新用户 ' + username + '信息');
+              modal.find('#id').val(button.data('id'));
+              modal.find('#telephone').val(button.data('telephone'));
+              modal.find('#age').val(button.data('age'));
+            });
+            jQuery('#btn-update').on('click', function() {
+                var id = jQuery('#id').val(),
+                    telephone = jQuery('#telephone').val(),
+                    age = jQuery('#age').val();
+                    jQuery.post('/updateUser/', {
+                        'id' : id,
+                        'telephone' : telephone,
+                        'age' : age
+                    }, function(data){
+                        console.log(data);
+                        if(data['ok']) {
+                            jQuery('#updateDialog').modal('hide');
+                            window.location.reload(); 
+                        } else {
+                            jQuery('#error').text(data['result']);
+                            jQuery('#error').show();
+                        }
+                    }, 'json');
+            });
+        });
 
-});
-
-
-
-jQuery('#show-dialog').on('show.bs.modal',function(event){
-    var button = $(event.relatedTarget),
-        host_id = button.data('id'),
-        host_ip = button.data('ip'),
-        categories = [],
-        series =[];
-    jQuery.get('/moniters/' + host_ip + '/', function(res) {
-      categories = res['data']['categories'];
-      series = res['data']['series'];
-  console.log('111111111111111111')
-  console.log(series)    
-      }, 'json');
-
-
-$('#host-show').highcharts({
-        title: {
-            text: 'Monthly Average Temperature',
-            x: -20 //center
-        },
-        subtitle: {
-            text: 'Source: WorldClimate.com',
-            x: -20
-        },
-        xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
-        yAxis: {
-            title: {
-                text: 'Temperature (°C)'
+   $( "#date-input" ).datepicker({dateFormat: "yy-mm-dd"});
+        var count = ''
+     $( "#mem-slide" ).slider({
+            slide: function( event, ui ) {
+                count = ui.value
+                 $('#mem-value').html(ui.value+'G')
             },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        tooltip: {
-            valueSuffix: '°C'
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-        },
-        series: [{
-            name: 'Tokyo',
-            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-        }, {
-            name: 'New York',
-            data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-        }, {
-            name: 'Berlin',
-            data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-        }, {
-            name: 'London',
-            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-        }]
-    });
-
-})
-
-
+             step:2,
+             max:128,
+             min:2,
+             animate: "fast"
+            })
 </script>
 {%endblock%}
